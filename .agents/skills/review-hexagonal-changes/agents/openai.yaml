@@ -1,0 +1,6 @@
+interface:
+  display_name: "Review Hexagonal Changes"
+  short_description: "Review boundaries, invariants, adapters"
+  default_prompt: "Use $review-hexagonal-changes to review these Spring Boot hexagonal changes before commit."
+policy:
+  allow_implicit_invocation: true

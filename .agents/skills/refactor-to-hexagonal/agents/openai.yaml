@@ -1,0 +1,6 @@
+interface:
+  display_name: "Refactor To Hexagonal"
+  short_description: "Move layered Spring modules to ports/adapters"
+  default_prompt: "Use $refactor-to-hexagonal to migrate this module into domain, use cases, ports, and adapters."
+policy:
+  allow_implicit_invocation: true

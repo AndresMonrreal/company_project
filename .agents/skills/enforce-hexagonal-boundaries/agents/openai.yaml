@@ -1,0 +1,6 @@
+interface:
+  display_name: "Enforce Hexagonal Boundaries"
+  short_description: "Catch imports and adapter bypasses"
+  default_prompt: "Use $enforce-hexagonal-boundaries to review package dependencies and port usage."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,6 @@
+interface:
+  display_name: "GraphQL MCP Workflow"
+  short_description: "Sync schema context without bypassing ports"
+  default_prompt: "Use $graphql-mcp-workflow to inspect GraphQL schema and resolver context safely."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Debug Hexagonal Issue"
+  short_description: "Trace bugs across domain, ports, adapters"
+  default_prompt: "Use $debug-hexagonal-issue to diagnose this backend failure by hexagonal layer."
+policy:
+  allow_implicit_invocation: true

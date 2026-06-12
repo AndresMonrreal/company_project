@@ -1,50 +1,114 @@
-# Spring Boot Project Structure
+# Hexagonal Spring Boot Architecture
 
-This project uses a feature-based Spring Boot structure. Each business area gets its own package so the code stays close to the process it represents.
+This project uses Hexagonal Architecture / Ports and Adapters for a manufacturing traceability backend.
 
-## Root Packages
+## Business Flow
 
-- `config`: application-wide Spring configuration, such as CORS, beans, object mapping, or future environment setup.
-- `security`: authentication and authorization configuration, such as JWT filters, password encoding, and role rules.
-- `common`: reusable utilities, enums, constants, base DTOs, and shared helpers used by multiple modules.
-- `exception`: global exception handling and shared API error responses.
+```text
+Reception -> Inventory -> Cutting -> Scrap -> Molding Output
+```
 
-## Business Modules
+Profiles 36, 37, 38, and 39 all follow this flow.
 
-- `auth`: login, token creation, and session-related logic.
-- `users`: system users, operators, supervisors, admins, and report-only users.
-- `roles`: role and permission definitions.
-- `profiles`: product profiles such as 36 front, 37 rear, 38 front, and 39 rear con liga.
-- `containers`: scanned physical containers such as tinas and carritos.
-- `machines`: cutting machines such as Corte 1, Corte 2, and Corte 3.
-- `shifts`: work shifts used for production traceability.
-- `movementtypes`: catalog of movement types used in the material history.
-- `reception`: material reception, where inventory starts.
-- `inventory`: available material that can be sent to cutting.
-- `cutting`: cutting records and the main rule: initial quantity equals good quantity plus scrap.
-- `scrap`: scrap/merma details created from the cutting process.
-- `molding`: output to molding, normally equal to the good cut quantity.
-- `traceability`: complete container and lot history.
-- `reports`: report queries and summaries.
-- `exports`: Excel/PDF exports for reports.
+The critical cutting invariant is:
 
-## Standard Module Layers
+```text
+initial_quantity = good_quantity + scrap_quantity
+```
 
-Each main module can contain these folders:
+This rule exists in the database constraint and must also exist in domain code.
 
-- `controller`: HTTP endpoints. This is where requests enter the API.
-- `dto`: request and response objects. This keeps API data separate from database entities.
-- `entity`: JPA/Hibernate database models.
-- `repository`: Spring Data JPA database access.
-- `service`: business rules and process logic.
-- `mapper`: conversion between entities and DTOs.
-- `exception`: module-specific errors.
+## Module Structure
 
-## Resources
+Each business module should follow this shape:
 
-- `src/main/resources/application.properties`: Spring Boot configuration.
-- `src/main/resources/db/migration`: future Flyway migration files.
-- `src/main/resources/static`: optional static files.
-- `src/main/resources/templates`: optional server-rendered templates or export templates.
+```text
+<module>/
+  domain/
+    model/
+    event/
+    exception/
+    port/
+      in/
+      out/
+    service/
+  application/
+    usecase/
+    mapper/
+  adapter/
+    in/
+      web/
+        dto/
+        graphql/
+    out/
+      persistence/
+      external/
+```
 
-No runtime behavior was added with this structure. The created packages are placeholders for the next implementation steps.
+## Layer Responsibilities
+
+- `domain/model`: pure Java aggregates, entities, and value objects.
+- `domain/event`: pure Java domain events.
+- `domain/exception`: business failures such as duplicate profile code or invalid cutting quantities.
+- `domain/port/in`: use case interfaces, commands, and results.
+- `domain/port/out`: persistence or external-system contracts needed by use cases.
+- `domain/service`: pure business policies involving multiple domain objects.
+- `application/usecase`: orchestration, transaction boundaries, authorization checks when needed, and calls to output ports.
+- `application/mapper`: mapping between domain objects and use case result DTOs.
+- `adapter/in/web`: REST controllers, request DTOs, response DTOs, validation, and web mappers.
+- `adapter/in/web/graphql`: GraphQL resolvers, payloads, and schema mapping when GraphQL is enabled.
+- `adapter/out/persistence`: JPA entities, Spring Data repositories, persistence mappers, and persistence adapters.
+- `adapter/out/external`: third-party system adapters.
+
+## Current Implemented Pilot
+
+`profiles` is the first migrated module:
+
+```text
+profiles/
+  domain/model/Profile.java
+  domain/exception/
+  domain/port/in/
+  domain/port/out/ProfileRepositoryPort.java
+  application/usecase/
+  application/mapper/ProfileResultMapper.java
+  adapter/in/web/
+  adapter/out/persistence/
+```
+
+`cutting/domain/model/CuttingQuantities.java` contains the core quantity invariant so future cutting work starts from domain behavior.
+
+## Architecture Enforcement
+
+ArchUnit rules live in:
+
+```text
+src/test/java/com/example/company/architecture/HexagonalArchitectureTest.java
+```
+
+They enforce:
+
+- domain does not depend on Spring, JPA, servlet APIs, or adapters.
+- application does not depend on adapters.
+- inbound adapters do not depend on outbound adapters.
+
+## Flyway Rules
+
+- Existing migrations are append-only history.
+- Do not edit `V1__create_initial_schema.sql`.
+- If schema must change, create a new migration such as `V2__add_<feature>.sql`.
+- Java persistence adapters must adapt to the existing database schema, not the other way around.
+
+## GraphQL And MCP
+
+GraphQL is not enabled at runtime yet. When enabled:
+
+- add `spring-boot-starter-graphql`.
+- put schema files under `src/main/resources/graphql/`.
+- put resolvers under `adapter/in/web/graphql/`.
+- resolvers call domain input ports, never repositories.
+- `sync-graphql-schema` summarizes schema, resolvers, and input ports for MCP/context use.
+
+## Frontend
+
+No frontend exists yet. Detect the actual framework before editing. If none exists, ask before creating one. The default recommendation for fast manufacturing admin screens is React + Vite + TypeScript unless Angular is explicitly chosen.

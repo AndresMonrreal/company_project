@@ -1,0 +1,67 @@
+# Decisions Log
+
+Append architectural and design decisions here. Entries are append-only and use ISO dates.
+
+## 2026-06-11 [Use Hexagonal Architecture]
+
+**Context:** The backend must support manufacturing traceability modules without coupling business rules to REST, JPA, or future GraphQL adapters.
+**Options considered:** Keep a traditional Spring controller-service-repository structure; use Hexagonal Architecture / Ports and Adapters.
+**Decision:** Use Hexagonal Architecture / Ports and Adapters.
+**Reason:** The business rules and use cases must be reusable across REST, future GraphQL, tests, and background jobs.
+**Consequences:** Domain stays pure Java, adapters translate external concerns, and all new modules follow the standard hexagonal package structure.
+
+## 2026-06-11 [Keep Ports In Domain]
+
+**Context:** The project needed one consistent location for use case interfaces and output contracts.
+**Options considered:** Put ports under `application/port`; put ports under `domain/port/in` and `domain/port/out`.
+**Decision:** Put ports under `domain/port/in` and `domain/port/out`.
+**Reason:** This matches the repository guide and makes ports part of the core contract instead of an adapter detail.
+**Consequences:** Controllers call input ports from domain, use cases implement input ports, and persistence adapters implement output ports from domain.
+
+## 2026-06-11 [Keep Flyway Migrations Append-Only]
+
+**Context:** The database schema is already defined and includes the manufacturing tables and cutting quantity constraint.
+**Options considered:** Modify existing migrations when code changes; only add new migrations when schema changes are explicitly needed.
+**Decision:** Do not modify existing migrations. Add a new migration only for explicit schema changes.
+**Reason:** Existing migration history must remain stable once shared.
+**Consequences:** Java persistence mapping must adapt to the current schema, and changes to `V1__create_initial_schema.sql` are not allowed.
+
+## 2026-06-11 [Split Application Services By Use Case]
+
+**Context:** The profile pilot needed clear transaction boundaries and reusable operations.
+**Options considered:** Keep one large service class per module; create one application service class per use case.
+**Decision:** Create one application service class per use case.
+**Reason:** Smaller use case classes make transactions, authorization, tests, and port wiring easier to reason about.
+**Consequences:** New modules should prefer names like `CreateProfileService`, `GetProfileService`, `UpdateProfileService`, and `DeleteProfileService`.
+
+## 2026-06-11 [Use ArchUnit For Architecture Boundaries]
+
+**Context:** Hexagonal boundaries are easy to break accidentally with imports from Spring, JPA, or adapters.
+**Options considered:** Rely on manual review only; add automated architecture tests.
+**Decision:** Add ArchUnit architecture tests.
+**Reason:** Automated tests catch dependency direction violations before merge.
+**Consequences:** Domain, application, and adapter dependency rules are enforced by `HexagonalArchitectureTest`.
+
+## 2026-06-11 [Defer GraphQL Runtime]
+
+**Context:** Agent and skill workflows include GraphQL guidance, but the backend has no schema or resolver files yet.
+**Options considered:** Add Spring GraphQL immediately; keep only the workflow guidance until a GraphQL feature is requested.
+**Decision:** Do not add GraphQL runtime dependencies until explicitly requested.
+**Reason:** Avoid adding unused runtime surface area before there is a real GraphQL requirement.
+**Consequences:** GraphQL work starts with schema files, resolvers that call input ports, and a schema-sync pass when the user asks for it.
+
+## 2026-06-11 [Do Not Create Frontend Yet]
+
+**Context:** The repository currently contains only the backend.
+**Options considered:** Scaffold a frontend immediately; wait until the user chooses or approves a frontend.
+**Decision:** Do not create a frontend without explicit user approval.
+**Reason:** The correct frontend framework should be detected or chosen before files are created.
+**Consequences:** When frontend work begins, detect existing files first. If none exist, recommend React + Vite + TypeScript for fast operational UI work unless Angular is chosen.
+
+## 2026-06-12 [Keep Roles Catalog Separate From Auth]
+
+**Context:** The base catalogs spec includes `roles`, but authentication, user management, role seeding, and endpoint protection have separate security concerns.
+**Options considered:** Implement roles catalog together with JWT, users, seeding, and authorization; implement only catalog CRUD and leave security behavior to dedicated specs.
+**Decision:** Keep the `roles` module as base catalog CRUD only for now.
+**Reason:** Catalog behavior can be implemented against the existing `roles` table without introducing password handling, token issuance, method security, or production seed-data policy.
+**Consequences:** Required roles such as ADMIN, SUPERVISOR, OPERADOR, and CONSULTA still need a separate role-seeding spec, and endpoint authorization needs a separate security spec.

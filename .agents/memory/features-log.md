@@ -278,3 +278,66 @@ Append completed features and changes here. Entries are append-only and use ISO 
 - `.\gradlew.bat test --tests "*HexagonalArchitectureTest"`
 
 **Notes:** Added only `spring-security-crypto` for BCrypt hashing. Did not add Spring Security web configuration, login, JWT, filters, endpoint authorization, frontend, or GraphQL. `V1__create_initial_schema.sql` was not modified. The role migration contains only required role data and no users or password hashes.
+
+## 2026-06-12 [Auth JWT login implementation]
+
+**Files created:**
+- `C:\Donatello\company\_plans\auth-jwt.md`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\model\LoginCredentials.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\model\AuthUserRecord.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\model\AuthenticatedUser.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\model\AuthenticatedUserSummary.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\model\JwtAccessToken.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\exception\InvalidCredentialsException.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\exception\InactiveUserException.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\exception\InactiveRoleException.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\exception\RoleUnavailableException.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\exception\TokenConfigurationException.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\port\in\LoginCommand.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\port\in\LoginResult.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\port\in\LoginUseCase.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\port\out\AuthUserLookupPort.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\port\out\PasswordVerificationPort.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\domain\port\out\JwtTokenPort.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\application\usecase\LoginService.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\application\mapper\LoginResultMapper.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\out\persistence\JdbcAuthUserLookupAdapter.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\out\security\BCryptPasswordVerificationAdapter.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\out\security\JwtProperties.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\out\security\HmacJwtTokenAdapter.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\AuthRestController.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\AuthWebMapper.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\AuthExceptionHandler.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\dto\LoginRequest.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\dto\LoginResponse.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\dto\AuthenticatedUserResponse.java`
+- `C:\Donatello\company\src\main\java\com\example\company\auth\adapter\in\web\dto\AuthErrorResponse.java`
+- `C:\Donatello\company\src\test\java\com\example\company\auth\application\usecase\AuthLoginServiceTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\auth\domain\model\AuthLoginCredentialsTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\auth\adapter\out\security\AuthBCryptPasswordVerificationAdapterTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\auth\adapter\out\security\AuthHmacJwtTokenAdapterTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\auth\adapter\in\web\AuthWebMapperTest.java`
+
+**Files modified:**
+- `C:\Donatello\company\_specs\auth-jwt.md`
+- `C:\Donatello\company\.agents\memory\project-context.md`
+- `C:\Donatello\company\.agents\memory\features-log.md`
+- `C:\Donatello\company\.agents\memory\decisions-log.md`
+
+**Ports added:**
+- Input: `LoginUseCase`.
+- Output: `AuthUserLookupPort`, `PasswordVerificationPort`, `JwtTokenPort`.
+
+**Tests added:**
+- `AuthLoginServiceTest` covers successful login, generic invalid credentials for unknown username and wrong password, inactive user rejection, missing role rejection, and inactive role rejection.
+- `AuthLoginCredentialsTest` covers required credentials, username trimming, and password redaction.
+- `AuthBCryptPasswordVerificationAdapterTest` covers BCrypt match/reject behavior.
+- `AuthHmacJwtTokenAdapterTest` covers HMAC JWT claims, optional issuer, secret requirement, and sensitive claim exclusion.
+- `AuthWebMapperTest` covers safe response mapping without password data.
+
+**Verification:**
+- `.\gradlew.bat compileJava testClasses`
+- `.\gradlew.bat test --tests "*Auth*"`
+- `.\gradlew.bat test --tests "*HexagonalArchitectureTest"`
+
+**Notes:** Implemented only `POST /api/auth/login`, BCrypt credential verification, and HMAC JWT access token issuance. JWT claims are `sub`, `userId`, `username`, `role`, `iat`, `exp`, and optional `iss`. Login validation and malformed JSON failures use `auth.validation-error`. No Spring Security filter chain, JWT request filters, protected endpoint rules, role-based authorization, refresh tokens, password reset, user management, registration, frontend, GraphQL, new tables, or Flyway migrations were added. `V1__create_initial_schema.sql` was not modified.

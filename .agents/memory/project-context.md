@@ -47,6 +47,8 @@ Profiles 36, 37, 38, and 39 all follow the same production flow.
 - Existing Flyway migrations are append-only history. Do not modify `V1__create_initial_schema.sql`.
 - The `roles` catalog is base catalog data only. Auth/JWT, users, role seeding, and endpoint authorization remain separate future specs/tasks.
 - Security bootstrap boundary: required platform roles may be seeded with a new append-only Flyway migration, but the initial `ADMIN` user and optional demo users must be created by application bootstrap after Flyway because passwords come from environment/configuration.
+- Auth/JWT boundary: the current `auth` module implements only login and HMAC JWT issuance. Spring Security filter chain configuration, JWT request filters, protected endpoint rules, and role-based authorization remain separate future specs/tasks.
+- JWT access tokens are signed with HMAC-SHA256 using Java crypto and a configured `security.jwt.secret` / `SECURITY_JWT_SECRET`; no dedicated JWT library has been added.
 - GraphQL is not runtime-enabled yet. Add Spring GraphQL only when explicitly requested.
 - No frontend app exists yet. Detect the actual framework before editing. If none exists, ask before creating one. The default recommendation is React + Vite + TypeScript unless Angular is explicitly chosen.
 
@@ -271,6 +273,29 @@ Current state:
 - JDBC persistence adapters for existing `roles` and `users` tables live under `security_bootstrap/adapter/out/persistence`.
 - Focused tests cover the use case, password hashing adapter, bootstrap properties, and domain redaction/validation.
 
+### auth
+
+`auth` is implemented as a narrow login/JWT module backed by the existing `users` and `roles` tables in `V1__create_initial_schema.sql`.
+
+Current state:
+
+- `POST /api/auth/login` is implemented in `auth/adapter/in/web/AuthRestController.java`.
+- The REST controller calls the `LoginUseCase` input port.
+- Login verifies raw credentials against `users.password_hash` through BCrypt.
+- Login reads users and roles with a JDBC adapter against the existing V1 schema; no auth migration was created.
+- Unknown username and wrong password both return generic invalid credentials behavior.
+- Inactive users are rejected.
+- Missing roles are rejected.
+- Inactive roles are rejected.
+- Login validation and malformed JSON failures return auth-specific `auth.validation-error` behavior.
+- Successful login returns a safe response with `accessToken`, `tokenType`, `expiresAt`, and user summary.
+- JWT access tokens are signed with HMAC-SHA256.
+- JWT claims include `sub` as user ID, `userId`, `username`, `role`, `iat`, `exp`, and optional `iss`.
+- `password_hash`, raw password, version fields, and secrets are excluded from API responses and JWT claims.
+- Token configuration is bound through `security.jwt.secret`, `security.jwt.expiration`, and optional `security.jwt.issuer`.
+- No Spring Security web configuration, JWT request filter, protected endpoint rules, role-based authorization, refresh tokens, password reset, registration, users module, frontend, or GraphQL code was added.
+- Focused tests cover login use case behavior, credential redaction, BCrypt verification, HMAC JWT claims, and safe web mapping.
+
 ### shared
 
 Shared web and domain support exists.
@@ -447,6 +472,25 @@ Current state:
 
 - `SecurityBootstrapService`
 
+### auth input ports
+
+- `LoginUseCase`
+
+### auth input command/result records
+
+- `LoginCommand`
+- `LoginResult`
+
+### auth output ports
+
+- `AuthUserLookupPort`
+- `PasswordVerificationPort`
+- `JwtTokenPort`
+
+### auth application use cases
+
+- `LoginService`
+
 ## Established Patterns
 
 - One application service class per use case.
@@ -464,6 +508,9 @@ Current state:
 - Cross-module references should prefer scalar IDs unless an explicit aggregate boundary requires otherwise. `containers` references `container_types` through `containerTypeId` and `container_type_id`, not through a JPA entity relationship.
 - Runtime bootstrap code that needs credentials must keep secrets out of migrations, source code, logs, and result objects.
 - Security bootstrap demo users require both an explicit enable flag and an allowed active profile: `local`, `dev`, or `test`.
+- Auth login keeps username-not-found and wrong-password failures indistinguishable with `auth.invalid-credentials`.
+- Auth JWT claims must stay limited to safe identity/role data; never include `password_hash`, raw passwords, secrets, or unnecessary personal data.
+- Auth endpoint protection is not implemented by the login module; future endpoint authorization must add filter/authorization behavior separately.
 - Use ArchUnit to enforce domain purity, application independence from adapters, and inbound/outbound adapter separation.
 - Agent and skill files must include concrete wrong code, correct code, the bug caused by the wrong code, and exact preferred structure or response format.
 - Examples in `.agents` use `com.empresa.app` by convention. Adapt examples to `com.example.company` before editing source files.
@@ -526,6 +573,7 @@ Known meaningful verification commands:
 - `.\gradlew.bat compileJava testClasses`
 - `.\gradlew.bat test --tests "*CuttingQuantitiesTest"`
 - `.\gradlew.bat test --tests "*SecurityBootstrap*"`
+- `.\gradlew.bat test --tests "*Auth*"`
 - `.\gradlew.bat test --tests "*HexagonalArchitectureTest"`
 - `.\gradlew.bat test`
 

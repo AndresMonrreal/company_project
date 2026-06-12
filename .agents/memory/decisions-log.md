@@ -73,3 +73,19 @@ Append architectural and design decisions here. Entries are append-only and use 
 **Decision:** Required roles may be seeded with a new append-only Flyway migration, while the initial `ADMIN` user and optional demo users must be created by an idempotent application bootstrap component after Flyway.
 **Reason:** Static SQL must not contain environment-derived passwords, password hashes, or production secrets.
 **Consequences:** The bootstrap implementation must read `SECURITY_BOOTSTRAP_ADMIN_PASSWORD`, hash it, avoid overwriting existing users, and keep demo users profile-controlled for local/dev/test only.
+
+## 2026-06-12 [Keep Auth JWT Login Separate From Endpoint Authorization]
+
+**Context:** The backend needs a usable login endpoint for bootstrapped users, but protected endpoint rules and JWT request filters have broader authorization implications.
+**Options considered:** Implement login, JWT issuance, filters, and role authorization together; implement only login and token issuance now.
+**Decision:** Implement only `POST /api/auth/login`, BCrypt verification, and HMAC JWT issuance in the `auth` module.
+**Reason:** The login boundary can be tested against existing `users` and `roles` tables without introducing request filter behavior, endpoint protection, or role policy before those specs are approved.
+**Consequences:** Future endpoint authorization must add Spring Security filter chain configuration, JWT request filters, protected endpoint rules, and role-based authorization in a separate spec/task.
+
+## 2026-06-12 [Use HMAC JWT Without Additional JWT Library]
+
+**Context:** The auth JWT spec requires HMAC signing for access tokens and allows adding only the smallest focused dependency if needed.
+**Options considered:** Add a dedicated JWT dependency; implement compact JWT generation with Java crypto and existing Jackson serialization.
+**Decision:** Use HMAC-SHA256 through Java crypto and Base64 URL encoding, with Jackson for JSON serialization.
+**Reason:** The current requirement is narrow token generation, so a new JWT library is not necessary yet.
+**Consequences:** `security.jwt.secret` / `SECURITY_JWT_SECRET` must provide the signing secret, token validation filters remain future work, and a future asymmetric-key or validation spec may revisit the library choice.

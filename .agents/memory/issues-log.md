@@ -23,3 +23,23 @@ Append solved bugs and problems here. Entries are append-only and use ISO dates.
 **Fix:** Add `CuttingQuantities` and validate `initialQuantity > 0`, non-negative good and scrap quantities, and `initialQuantity == goodQuantity + scrapQuantity`.
 **Prevention:** Put manufacturing invariants in domain models or value objects before saving to persistence.
 
+## 2026-06-12 [SpringBeanWiring] in auth/adapter/out/security/HmacJwtTokenAdapter.java
+
+**Symptom:** Application startup failed with `No default constructor found` while creating the `hmacJwtTokenAdapter` bean.
+**Root cause:** `HmacJwtTokenAdapter` had both a public production constructor and a package-private test constructor, so Spring did not select the dependency constructor and fell back to default construction.
+**Fix:** Add `@Autowired` to the public constructor that receives `JwtProperties` and `ObjectMapper`.
+**Prevention:** When a Spring component has multiple constructors, explicitly mark the production constructor with `@Autowired` or move test-only constructors behind a factory/test helper.
+
+## 2026-06-12 [SpringBeanWiring] in auth/adapter/out/security/HmacJwtTokenAdapter.java
+
+**Symptom:** Application startup failed because `HmacJwtTokenAdapter` required a `com.fasterxml.jackson.databind.ObjectMapper` bean that was not available.
+**Root cause:** The JWT adapter depended on Spring-managed Jackson infrastructure even though the app did not expose an `ObjectMapper` bean at runtime.
+**Fix:** Change the production constructor to require only `JwtProperties` and create a local `ObjectMapper` for the adapter's simple JWT claim serialization.
+**Prevention:** For narrow outbound adapters that only serialize internal primitive maps, avoid unnecessary Spring infrastructure dependencies unless the project already provides and tests those beans.
+
+## 2026-06-12 [TrackedSecrets] in .env
+
+**Symptom:** `.env` was already tracked by Git, so adding `.env` to `.gitignore` did not prevent local secret values from appearing in staged changes.
+**Root cause:** Git ignore rules do not apply to files that are already tracked in the index.
+**Fix:** Remove `.env` from Git tracking with `git rm --cached -- .env` while preserving the local file.
+**Prevention:** Keep `.env` ignored before it is ever added, and use committed example files such as `.env.example` for non-secret configuration names only.

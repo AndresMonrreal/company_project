@@ -1,0 +1,12 @@
+package com.example.company.auth.domain.exception;
+
+public class InvalidCredentialsException extends RuntimeException {
+
+    public InvalidCredentialsException() {
+        super("Invalid username or password");
+    }
+
+    public String code() {
+        return "auth.invalid-credentials";
+    }
+}

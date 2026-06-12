@@ -65,3 +65,11 @@ Append architectural and design decisions here. Entries are append-only and use 
 **Decision:** Keep the `roles` module as base catalog CRUD only for now.
 **Reason:** Catalog behavior can be implemented against the existing `roles` table without introducing password handling, token issuance, method security, or production seed-data policy.
 **Consequences:** Required roles such as ADMIN, SUPERVISOR, OPERADOR, and CONSULTA still need a separate role-seeding spec, and endpoint authorization needs a separate security spec.
+
+## 2026-06-12 [Split Security Bootstrap Static Data From Credentials]
+
+**Context:** Required roles are static platform data, but the initial admin password must come from environment/configuration.
+**Options considered:** Seed roles and users together in SQL; seed only roles with Flyway and create users through application bootstrap.
+**Decision:** Required roles may be seeded with a new append-only Flyway migration, while the initial `ADMIN` user and optional demo users must be created by an idempotent application bootstrap component after Flyway.
+**Reason:** Static SQL must not contain environment-derived passwords, password hashes, or production secrets.
+**Consequences:** The bootstrap implementation must read `SECURITY_BOOTSTRAP_ADMIN_PASSWORD`, hash it, avoid overwriting existing users, and keep demo users profile-controlled for local/dev/test only.

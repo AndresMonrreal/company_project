@@ -214,3 +214,67 @@ Append completed features and changes here. Entries are append-only and use ISO 
 - Focused application use case tests for existing `container_types` and `containers`.
 
 **Notes:** Implemented only base catalog CRUD for machines, shifts, and roles. Corrected the plan to use lowercase dot-separated `DomainException` error codes: `machine.duplicate-name`, `machine.not-found`, `shift.duplicate-name`, `shift.not-found`, `role.duplicate-name`, and `role.not-found`. Auth, JWT, users, role seeding, frontend, GraphQL, endpoint authorization, and operational lookup endpoints remain out of scope. No Flyway migration was modified.
+
+## 2026-06-12 [Security bootstrap spec and plan]
+
+**Files created:**
+- `C:\Donatello\company\_plans\security-bootstrap.md`
+
+**Files modified:**
+- `C:\Donatello\company\_specs\security-bootstrap.md`
+- `C:\Donatello\company\.agents\memory\project-context.md`
+- `C:\Donatello\company\.agents\memory\decisions-log.md`
+- `C:\Donatello\company\.agents\memory\features-log.md`
+
+**Ports added:** None.
+
+**Tests added:** None.
+
+**Notes:** Clarified that required roles may be seeded with an append-only Flyway migration, while the initial `ADMIN` user and optional demo users must be application-bootstrap controlled because passwords come from environment/configuration. Created an implementation plan only; no source code or migrations were implemented.
+
+## 2026-06-12 [Security bootstrap implementation]
+
+**Files created:**
+- `C:\Donatello\company\src\main\resources\db\migration\V2__seed_required_roles.sql`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\model\BootstrapRoleName.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\model\BootstrapUserDefinition.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\port\in\RunSecurityBootstrapUseCase.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\port\in\SecurityBootstrapCommand.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\port\in\SecurityBootstrapResult.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\port\out\PasswordHashingPort.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\port\out\SecurityBootstrapRoleLookupPort.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\domain\port\out\SecurityBootstrapUserPort.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\application\usecase\SecurityBootstrapService.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\adapter\in\startup\SecurityBootstrapProperties.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\adapter\in\startup\SecurityBootstrapRunner.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\adapter\out\persistence\JdbcSecurityBootstrapRoleLookupAdapter.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\adapter\out\persistence\JdbcSecurityBootstrapUserAdapter.java`
+- `C:\Donatello\company\src\main\java\com\example\company\security_bootstrap\adapter\out\security\BCryptPasswordHashingAdapter.java`
+- `C:\Donatello\company\src\test\java\com\example\company\security_bootstrap\application\usecase\SecurityBootstrapServiceTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\security_bootstrap\domain\model\SecurityBootstrapUserDefinitionTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\security_bootstrap\adapter\out\security\BCryptPasswordHashingAdapterTest.java`
+- `C:\Donatello\company\src\test\java\com\example\company\security_bootstrap\adapter\in\startup\SecurityBootstrapPropertiesTest.java`
+
+**Files modified:**
+- `C:\Donatello\company\_specs\security-bootstrap.md`
+- `C:\Donatello\company\_plans\security-bootstrap.md`
+- `C:\Donatello\company\build.gradle`
+- `C:\Donatello\company\.agents\memory\project-context.md`
+- `C:\Donatello\company\.agents\memory\features-log.md`
+
+**Ports added:**
+- Input: `RunSecurityBootstrapUseCase`.
+- Output: `PasswordHashingPort`, `SecurityBootstrapRoleLookupPort`, `SecurityBootstrapUserPort`.
+
+**Tests added:**
+- `SecurityBootstrapServiceTest` covers disabled bootstrap, missing roles, admin password requirement, idempotent existing admin/demo users, demo dual gate, and secret redaction.
+- `SecurityBootstrapUserDefinitionTest` covers domain validation, trimming, and password redaction.
+- `BCryptPasswordHashingAdapterTest` covers BCrypt hashing and blank password rejection.
+- `SecurityBootstrapPropertiesTest` covers disabled bootstrap, environment password binding, fallback test password, and demo profile gating.
+
+**Verification:**
+- `.\gradlew.bat compileJava testClasses`
+- `.\gradlew.bat test --tests "*SecurityBootstrap*"`
+- `.\gradlew.bat test --tests "*HexagonalArchitectureTest"`
+
+**Notes:** Added only `spring-security-crypto` for BCrypt hashing. Did not add Spring Security web configuration, login, JWT, filters, endpoint authorization, frontend, or GraphQL. `V1__create_initial_schema.sql` was not modified. The role migration contains only required role data and no users or password hashes.

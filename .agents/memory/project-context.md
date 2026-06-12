@@ -28,6 +28,7 @@ Profiles 36, 37, 38, and 39 all follow the same production flow.
 - Spring Web MVC.
 - Spring Validation.
 - Spring Data JPA.
+- Spring Security Crypto for BCrypt password hashing only; Spring Security web/login/JWT/filter configuration is not implemented.
 - PostgreSQL.
 - Flyway migrations.
 - JUnit with Spring Boot test support.
@@ -45,6 +46,7 @@ Profiles 36, 37, 38, and 39 all follow the same production flow.
 - Return response DTOs from REST and future GraphQL adapters, never JPA entities.
 - Existing Flyway migrations are append-only history. Do not modify `V1__create_initial_schema.sql`.
 - The `roles` catalog is base catalog data only. Auth/JWT, users, role seeding, and endpoint authorization remain separate future specs/tasks.
+- Security bootstrap boundary: required platform roles may be seeded with a new append-only Flyway migration, but the initial `ADMIN` user and optional demo users must be created by application bootstrap after Flyway because passwords come from environment/configuration.
 - GraphQL is not runtime-enabled yet. Add Spring GraphQL only when explicitly requested.
 - No frontend app exists yet. Detect the actual framework before editing. If none exists, ask before creating one. The default recommendation is React + Vite + TypeScript unless Angular is explicitly chosen.
 
@@ -248,6 +250,27 @@ Current state:
 - Tests cover domain rules and application use cases.
 - No Flyway migration was modified.
 
+### security_bootstrap
+
+`security_bootstrap` is implemented as a narrow hexagonal bootstrap module for required security platform data.
+
+Current state:
+
+- Required roles `ADMIN`, `SUPERVISOR`, `OPERADOR`, and `CONSULTA` are seeded by append-only migration `V2__seed_required_roles.sql`.
+- `V1__create_initial_schema.sql` remains unchanged.
+- The initial `admin` user is created by application bootstrap after Flyway, not by static SQL.
+- Runtime bootstrap can be disabled with `security.bootstrap.enabled=false`.
+- If bootstrap is enabled and `admin` does not exist, `SECURITY_BOOTSTRAP_ADMIN_PASSWORD` is required.
+- Existing `admin` is left unchanged and is not overwritten.
+- Optional demo users require both `security.bootstrap.demo-users.enabled=true` and an active profile of `local`, `dev`, or `test`.
+- Passwords are hashed through `spring-security-crypto` BCrypt via `PasswordHashingPort`.
+- No Spring Security web configuration, login endpoint, JWT generation/validation, filters, endpoint authorization, frontend, or GraphQL code was added.
+- Domain model and ports live under `security_bootstrap/domain`.
+- Application orchestration lives in `security_bootstrap/application/usecase/SecurityBootstrapService.java`.
+- Startup adapter and properties live under `security_bootstrap/adapter/in/startup`.
+- JDBC persistence adapters for existing `roles` and `users` tables live under `security_bootstrap/adapter/out/persistence`.
+- Focused tests cover the use case, password hashing adapter, bootstrap properties, and domain redaction/validation.
+
 ### shared
 
 Shared web and domain support exists.
@@ -405,6 +428,25 @@ Current state:
 - `UpdateRoleService`
 - `DeleteRoleService`
 
+### security_bootstrap input ports
+
+- `RunSecurityBootstrapUseCase`
+
+### security_bootstrap input command/result records
+
+- `SecurityBootstrapCommand`
+- `SecurityBootstrapResult`
+
+### security_bootstrap output ports
+
+- `PasswordHashingPort`
+- `SecurityBootstrapRoleLookupPort`
+- `SecurityBootstrapUserPort`
+
+### security_bootstrap application use cases
+
+- `SecurityBootstrapService`
+
 ## Established Patterns
 
 - One application service class per use case.
@@ -420,6 +462,8 @@ Current state:
 - `DomainErrorType.CONFLICT` maps to duplicate/conflict behavior.
 - `DomainErrorType.BUSINESS_RULE` maps to business-rule rejection behavior.
 - Cross-module references should prefer scalar IDs unless an explicit aggregate boundary requires otherwise. `containers` references `container_types` through `containerTypeId` and `container_type_id`, not through a JPA entity relationship.
+- Runtime bootstrap code that needs credentials must keep secrets out of migrations, source code, logs, and result objects.
+- Security bootstrap demo users require both an explicit enable flag and an allowed active profile: `local`, `dev`, or `test`.
 - Use ArchUnit to enforce domain purity, application independence from adapters, and inbound/outbound adapter separation.
 - Agent and skill files must include concrete wrong code, correct code, the bug caused by the wrong code, and exact preferred structure or response format.
 - Examples in `.agents` use `com.empresa.app` by convention. Adapt examples to `com.example.company` before editing source files.
@@ -481,6 +525,7 @@ Known meaningful verification commands:
 
 - `.\gradlew.bat compileJava testClasses`
 - `.\gradlew.bat test --tests "*CuttingQuantitiesTest"`
+- `.\gradlew.bat test --tests "*SecurityBootstrap*"`
 - `.\gradlew.bat test --tests "*HexagonalArchitectureTest"`
 - `.\gradlew.bat test`
 

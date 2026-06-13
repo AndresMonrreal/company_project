@@ -46,6 +46,17 @@ tesla-web-app/src/app/
 - Use standalone components unless NgModules are explicitly chosen
 - All GraphQL operations in `*.graphql` files per feature
 
+## Mandatory behavior for every frontend task
+
+1. Read `.claude/memory/project-context.md` before starting
+2. Use `$create-angular-feature` when creating any new feature module
+3. Use `$create-angular-auth-flow` for any auth-related work
+4. Use `$review-angular-changes` before any commit
+5. Components never call HttpClient directly — always through typed API client
+6. Components never access localStorage directly — always through AuthTokenStorage
+7. Every new feature must include: API client, service, page, guard if needed, tests
+8. Update `.claude/memory/project-context.md` after completing any feature
+
 ## Roles
 
 | Role | Access |

@@ -1,0 +1,132 @@
+{
+  "project": "company",
+  "architecture": "hexagonal-ports-and-adapters",
+  "business": {
+    "domain": "manufacturing-traceability",
+    "flow": [
+      "reception",
+      "inventory",
+      "cutting",
+      "scrap",
+      "molding-output"
+    ],
+    "criticalRules": [
+      "initial_quantity = good_quantity + scrap_quantity"
+    ],
+    "profiles": [
+      "36",
+      "37",
+      "38",
+      "39"
+    ]
+  },
+  "backend": {
+    "framework": "spring-boot",
+    "language": "java",
+    "buildTool": "gradle",
+    "database": "postgresql",
+    "migrations": "flyway",
+    "packageRoot": "src/main/java/com/example/company",
+    "examplePackage": "com.empresa.app",
+    "migrationPolicy": "append-only"
+  },
+  "hexagonalStructure": {
+    "domain": [
+      "model",
+      "event",
+      "exception",
+      "port/in",
+      "port/out",
+      "service"
+    ],
+    "application": [
+      "usecase",
+      "mapper"
+    ],
+    "adapterIn": [
+      "web",
+      "web/dto",
+      "web/graphql"
+    ],
+    "adapterOut": [
+      "persistence",
+      "external"
+    ]
+  },
+  "frontend": {
+    "status": "not-created",
+    "selectedStack": "angular-typescript",
+    "appRoot": "frontend",
+    "sourceRoot": "frontend/src",
+    "architecture": [
+      "core",
+      "shared",
+      "features"
+    ],
+    "backendRootPolicy": "backend-remains-at-repository-root"
+  },
+  "workflow": {
+    "specsDir": "_specs",
+    "plansDir": "_plans",
+    "branchPrefix": "codex/feature"
+  },
+  "agents": {
+    "primary": [
+      "hexagonal-domain-developer",
+      "hexagonal-application-developer",
+      "hexagonal-persistence-adapter",
+      "hexagonal-web-adapter",
+      "hexagonal-graphql-adapter",
+      "hexagonal-exception-handler",
+      "hexagonal-security-reviewer",
+      "hexagonal-test-engineer",
+      "frontend-developer"
+    ]
+  },
+  "skills": {
+    "primary": [
+      "create-hexagonal-feature",
+      "debug-hexagonal-issue",
+      "enforce-hexagonal-boundaries",
+      "refactor-to-hexagonal",
+      "graphql-mcp-workflow",
+      "review-hexagonal-changes",
+      "explore-codebase",
+      "create-angular-feature",
+      "create-angular-auth-flow",
+      "review-angular-changes"
+    ]
+  },
+  "commands": [
+    "new-feature",
+    "fix-issue",
+    "code-review",
+    "run-tests",
+    "sync-graphql-schema",
+    "commit-message",
+    "spec",
+    "plan-spec",
+    "execute-plan"
+  ],
+  "graphqlMcp": {
+    "status": "schema-sync-command-configured-runtime-not-enabled",
+    "schemaDir": "src/main/resources/graphql",
+    "resolverPackagePattern": "adapter/in/web/graphql",
+    "command": ".agents/commands/sync-graphql-schema.md",
+    "runtimeDependencyPolicy": "do-not-add-spring-graphql-unless-requested"
+  },
+  "verification": {
+    "compile": ".\\gradlew.bat compileJava testClasses",
+    "domainTestExample": ".\\gradlew.bat test --tests \"*CuttingQuantitiesTest\"",
+    "architectureTest": ".\\gradlew.bat test --tests \"*HexagonalArchitectureTest\"",
+    "fullTests": ".\\gradlew.bat test"
+  },
+  "qualityBar": {
+    "requiresWrongExample": true,
+    "requiresCorrectExample": true,
+    "requiresBugExplanation": true,
+    "requiresRealSpringCode": true,
+    "requiresDomainInvariantExamples": true,
+    "requiresArchUnitExamples": true
+  }
+}

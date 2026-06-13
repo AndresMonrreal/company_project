@@ -36,3 +36,19 @@ out/
 ### VS Code ###
 .vscode/
 .env
+
+# Gradle
+tesla-api/build/
+tesla-api/.gradle/
+
+# Angular
+tesla-web-app/node_modules/
+tesla-web-app/dist/
+tesla-web-app/.angular/
+
+# Env
+tesla-api/.env
+
+# IDE
+.idea/
+*.iml

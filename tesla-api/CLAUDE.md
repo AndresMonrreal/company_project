@@ -108,6 +108,18 @@ Use these agents — do not do the work inline:
 - Tests and ArchUnit → `hexagonal-test-engineer`
 - Security/auth/JWT/roles → `hexagonal-security-reviewer`
 
+## Mandatory behavior for every backend task
+
+1. Read `.claude/memory/project-context.md` before starting
+2. Use `code-review-graph` MCP tools before any Grep/Glob/Read
+3. Route to the correct agent — never implement inline
+4. Use `$create-hexagonal-feature` when creating a new module
+5. Use `$enforce-hexagonal-boundaries` after any domain/adapter change
+6. Use `$review-hexagonal-changes` before any commit
+7. Run `hexagonal-security-reviewer` after any auth, JWT, or query change
+8. Never modify existing Flyway migrations — append only
+9. Update `.claude/memory/project-context.md` after completing any module
+
 ## Flyway state
 
 - `V1__create_initial_schema.sql` — full schema, all tables, cutting_quantity_rule constraint — DO NOT MODIFY

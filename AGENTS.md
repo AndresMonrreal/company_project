@@ -42,7 +42,7 @@ All profiles such as 36, 37, 38, and 39 follow the same production flow.
 - JUnit with Spring Boot test support
 - ArchUnit for automated architecture boundary tests
 
-There is no frontend app in this repository yet. When frontend work starts, detect the actual framework from files before editing. If no frontend exists, ask before creating one. Default recommendation for fast business UI work is React + Vite + TypeScript unless the user explicitly chooses Angular.
+There is no frontend app in this repository yet. When frontend work starts, use Angular + TypeScript. Future frontend code must live under `frontend/`. Keep the Spring Boot backend at the repository root for now. Do not put Angular files under backend `src/`, and do not move the backend into `backend/` unless a separate restructure task is approved.
 
 ## Architecture
 
@@ -125,6 +125,9 @@ Examples in `.agents` use `com.empresa.app` by convention. Real project code cur
 - Refactor layered code: `$refactor-to-hexagonal`.
 - GraphQL/MCP workflow: `$graphql-mcp-workflow`.
 - Review changes: `$review-hexagonal-changes`.
+- Angular auth/login/interceptors/guards: `$create-angular-auth-flow`.
+- Angular catalog/features/pages/forms/API clients: `$create-angular-feature`.
+- Angular frontend review before commit: `$review-angular-changes`.
 
 ## Commands
 
@@ -157,6 +160,23 @@ Examples in `.agents` use `com.empresa.app` by convention. Real project code cur
 - Use Flyway for schema changes and keep migrations append-only after they are shared.
 - Do not modify existing migrations. Add a new migration only when schema changes are explicitly needed.
 - Use `FetchType.LAZY` by default and load relationships intentionally with projections, fetch joins, or `@EntityGraph`.
+
+## Frontend Conventions
+
+- No Angular app exists yet.
+- Future frontend stack is Angular + TypeScript.
+- Future frontend app must live under `frontend/`.
+- Backend currently remains at repository root.
+- Do not put Angular files under backend `src/`.
+- Do not move backend into `backend/` unless a separate restructure task is approved.
+- Use `.agents/agents/frontend-developer.md` for frontend work.
+- Use `$create-angular-auth-flow` for login, token storage, HTTP interceptors, guards, logout, and auth route protection.
+- Use `$create-angular-feature` for catalog screens, feature pages, forms, services, typed API clients, routes, guards, and tests.
+- Use `$review-angular-changes` before frontend commits.
+- Frontend should follow Angular `core/shared/features` architecture, not backend hexagonal package names.
+- Keep frontend/backend boundaries clear:
+  - backend: `src/main/java`, `src/main/resources`, Gradle, Flyway.
+  - frontend: `frontend/src`, `frontend/angular.json`, `frontend/package.json`.
 
 ## Verification
 

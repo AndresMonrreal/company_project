@@ -1,11 +1,11 @@
 ---
 name: create-angular-feature
-description: Create Angular feature pages, catalog screens, forms, services, typed API clients, routes, guards, and tests under frontend/ for this manufacturing traceability system.
+description: Create Angular feature pages, catalog screens, forms, services, typed API clients, routes, guards, and tests under tesla-web-app/ for this manufacturing traceability system.
 ---
 
 # Create Angular Feature
 
-Create Angular + TypeScript feature code under `frontend/`. Do not create or edit backend source unless the user explicitly asks.
+Create Angular + TypeScript feature code under `tesla-web-app/`. Do not create or edit backend source unless the user explicitly asks.
 
 Use standalone components unless the project intentionally chooses NgModules later.
 
@@ -25,7 +25,7 @@ component -> hardcoded backend URL scattered in templates/services
 
 ## Expected Feature Structure
 
-For `frontend/src/app/features/<feature>/`:
+For `tesla-web-app/src/app/features/<feature>/`:
 
 ```text
 <feature>.routes.ts
@@ -207,7 +207,7 @@ Add or update tests next to the code under test:
 - Component tests for form validation, loading, empty, error, and action visibility.
 - Guard tests for allowed roles and redirects.
 
-Run from `frontend/` when the app exists:
+Run from `tesla-web-app/` when the app exists:
 
 ```powershell
 npm test

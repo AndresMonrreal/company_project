@@ -5,7 +5,7 @@ description: Implement Angular login, token storage, auth/session state, HTTP in
 
 # Create Angular Auth Flow
 
-Implement Angular auth under `frontend/src/app/core/auth`, `frontend/src/app/core/http`, `frontend/src/app/core/guards`, and `frontend/src/app/features/auth`.
+Implement Angular auth under `tesla-web-app/src/app/core/auth`, `tesla-web-app/src/app/core/http`, `tesla-web-app/src/app/core/guards`, and `tesla-web-app/src/app/features/auth`.
 
 Do not change backend auth behavior unless explicitly requested.
 
@@ -37,18 +37,18 @@ Do not store raw passwords. Do not log tokens or passwords. Do not expose `passw
 ## Structure
 
 ```text
-frontend/src/app/core/auth/
+tesla-web-app/src/app/core/auth/
   auth-session.ts
   auth-token-storage.ts
   auth.models.ts
-frontend/src/app/core/http/
+tesla-web-app/src/app/core/http/
   api-base-url.ts
   auth.interceptor.ts
   auth-error.interceptor.ts
-frontend/src/app/core/guards/
+tesla-web-app/src/app/core/guards/
   auth.guard.ts
   role.guard.ts
-frontend/src/app/features/auth/
+tesla-web-app/src/app/features/auth/
   login/
 ```
 

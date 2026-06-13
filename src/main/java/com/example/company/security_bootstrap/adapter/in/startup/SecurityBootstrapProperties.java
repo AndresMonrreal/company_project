@@ -47,14 +47,20 @@ public class SecurityBootstrapProperties {
                 firstNonBlank(environment.getProperty("SECURITY_BOOTSTRAP_ADMIN_PASSWORD"), admin.password),
                 demoUsers.enabled,
                 activeProfiles,
+                demoUsers.supervisor.username,
+                demoUsers.supervisor.fullName,
                 firstNonBlank(
                         environment.getProperty("SECURITY_BOOTSTRAP_SUPERVISOR_DEMO_PASSWORD"),
                         demoUsers.supervisor.password
                 ),
+                demoUsers.operador.username,
+                demoUsers.operador.fullName,
                 firstNonBlank(
                         environment.getProperty("SECURITY_BOOTSTRAP_OPERADOR_DEMO_PASSWORD"),
                         demoUsers.operador.password
                 ),
+                demoUsers.consulta.username,
+                demoUsers.consulta.fullName,
                 firstNonBlank(
                         environment.getProperty("SECURITY_BOOTSTRAP_CONSULTA_DEMO_PASSWORD"),
                         demoUsers.consulta.password
@@ -103,9 +109,9 @@ public class SecurityBootstrapProperties {
     public static class DemoUsers {
 
         private boolean enabled = false;
-        private DemoUser supervisor = new DemoUser("supervisor.demo", "Demo Supervisor");
-        private DemoUser operador = new DemoUser("operador.demo", "Demo Operator");
-        private DemoUser consulta = new DemoUser("consulta.demo", "Demo Consulta");
+        private DemoUser supervisor = new DemoUser("supervisor", "Demo Supervisor");
+        private DemoUser operador = new DemoUser("operador", "Demo Operator");
+        private DemoUser consulta = new DemoUser("consulta", "Demo Consulta");
 
         public boolean isEnabled() {
             return enabled;

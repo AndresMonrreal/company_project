@@ -19,10 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SecurityBootstrapService implements RunSecurityBootstrapUseCase {
 
-    private static final String SUPERVISOR_DEMO_USERNAME = "supervisor.demo";
-    private static final String OPERADOR_DEMO_USERNAME = "operador.demo";
-    private static final String CONSULTA_DEMO_USERNAME = "consulta.demo";
-
     private final SecurityBootstrapRoleLookupPort roleLookupPort;
     private final SecurityBootstrapUserPort userPort;
     private final PasswordHashingPort passwordHashingPort;
@@ -61,8 +57,8 @@ public class SecurityBootstrapService implements RunSecurityBootstrapUseCase {
 
         if (command.demoUsersAllowed()) {
             createUserIfMissing(
-                    SUPERVISOR_DEMO_USERNAME,
-                    "Demo Supervisor",
+                    command.supervisorDemoUsername(),
+                    command.supervisorDemoFullName(),
                     BootstrapRoleName.SUPERVISOR,
                     command.supervisorDemoPassword(),
                     true,
@@ -71,8 +67,8 @@ public class SecurityBootstrapService implements RunSecurityBootstrapUseCase {
                     existingUsernames
             );
             createUserIfMissing(
-                    OPERADOR_DEMO_USERNAME,
-                    "Demo Operator",
+                    command.operadorDemoUsername(),
+                    command.operadorDemoFullName(),
                     BootstrapRoleName.OPERADOR,
                     command.operadorDemoPassword(),
                     true,
@@ -81,8 +77,8 @@ public class SecurityBootstrapService implements RunSecurityBootstrapUseCase {
                     existingUsernames
             );
             createUserIfMissing(
-                    CONSULTA_DEMO_USERNAME,
-                    "Demo Consulta",
+                    command.consultaDemoUsername(),
+                    command.consultaDemoFullName(),
                     BootstrapRoleName.CONSULTA,
                     command.consultaDemoPassword(),
                     true,

@@ -11,8 +11,14 @@ public record SecurityBootstrapCommand(
         String adminPassword,
         boolean demoUsersEnabled,
         Set<String> activeProfiles,
+        String supervisorDemoUsername,
+        String supervisorDemoFullName,
         String supervisorDemoPassword,
+        String operadorDemoUsername,
+        String operadorDemoFullName,
         String operadorDemoPassword,
+        String consultaDemoUsername,
+        String consultaDemoFullName,
         String consultaDemoPassword
 ) {
 
@@ -21,6 +27,12 @@ public record SecurityBootstrapCommand(
     public SecurityBootstrapCommand {
         adminUsername = defaultText(adminUsername, "admin");
         adminFullName = defaultText(adminFullName, "Initial Administrator");
+        supervisorDemoUsername = defaultText(supervisorDemoUsername, "supervisor");
+        supervisorDemoFullName = defaultText(supervisorDemoFullName, "Demo Supervisor");
+        operadorDemoUsername = defaultText(operadorDemoUsername, "operador");
+        operadorDemoFullName = defaultText(operadorDemoFullName, "Demo Operator");
+        consultaDemoUsername = defaultText(consultaDemoUsername, "consulta");
+        consultaDemoFullName = defaultText(consultaDemoFullName, "Demo Consulta");
         activeProfiles = normalizeProfiles(activeProfiles);
     }
 

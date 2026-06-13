@@ -39,8 +39,14 @@ class SecurityBootstrapServiceTest {
                 null,
                 true,
                 Set.of("test"),
+                "supervisor",
+                "Demo Supervisor",
                 null,
+                "operador",
+                "Demo Operator",
                 null,
+                "consulta",
+                "Demo Consulta",
                 null
         ));
 
@@ -168,13 +174,13 @@ class SecurityBootstrapServiceTest {
         assertThat(localResult.demoUsersRequested()).isTrue();
         assertThat(localResult.demoUsersAllowed()).isTrue();
         assertThat(localUserPort.inserted).extracting(SavedUser::username)
-                .containsExactly("admin", "supervisor.demo", "operador.demo", "consulta.demo");
+                .containsExactly("admin", "supervisor", "operador", "consulta");
     }
 
     @Test
     void doesNotOverwriteExistingDemoUsers() {
         FakeUserPort userPort = new FakeUserPort();
-        userPort.existing.add("supervisor.demo");
+        userPort.existing.add("supervisor");
         SecurityBootstrapService service = new SecurityBootstrapService(
                 FakeRoleLookupPort.withAllRoles(),
                 userPort,
@@ -183,9 +189,9 @@ class SecurityBootstrapServiceTest {
 
         SecurityBootstrapResult result = service.run(command("admin-secret", true, Set.of("test")));
 
-        assertThat(result.existingUsernames()).containsExactly("supervisor.demo");
+        assertThat(result.existingUsernames()).containsExactly("supervisor");
         assertThat(userPort.inserted).extracting(SavedUser::username)
-                .containsExactly("admin", "operador.demo", "consulta.demo");
+                .containsExactly("admin", "operador", "consulta");
     }
 
     @Test
@@ -224,8 +230,14 @@ class SecurityBootstrapServiceTest {
                 adminPassword,
                 demoUsersEnabled,
                 activeProfiles,
+                "supervisor",
+                "Demo Supervisor",
                 "supervisor-secret",
+                "operador",
+                "Demo Operator",
                 "operador-secret",
+                "consulta",
+                "Demo Consulta",
                 "consulta-secret"
         );
     }

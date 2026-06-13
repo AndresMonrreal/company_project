@@ -43,3 +43,24 @@ Append solved bugs and problems here. Entries are append-only and use ISO dates.
 **Root cause:** Git ignore rules do not apply to files that are already tracked in the index.
 **Fix:** Remove `.env` from Git tracking with `git rm --cached -- .env` while preserving the local file.
 **Prevention:** Keep `.env` ignored before it is ever added, and use committed example files such as `.env.example` for non-secret configuration names only.
+
+## 2026-06-12 [TestStackMismatch] in security/config/SecurityConfigurationTest.java
+
+**Symptom:** `compileTestJava` failed because `org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest` was not available in the current Spring Boot 4 Web MVC test dependencies.
+**Root cause:** The generated test assumed the older servlet test slice package/dependency existed in this stack.
+**Fix:** Replace the `@WebMvcTest`-based test with a lightweight `SecurityAuthorizationPolicyTest` that documents the current public endpoint and catalog role matrix without depending on the missing test slice.
+**Prevention:** Before generating MVC slice tests on Spring Boot 4, verify the project has the matching webmvc test artifact/package; otherwise prefer focused unit tests or explicit integration test setup.
+
+## 2026-06-12 [ArchitectureBoundary] in security/adapter/in/web/SecurityErrorWriter.java
+
+**Symptom:** `HexagonalArchitectureTest` failed `inbound_adapters_must_not_depend_on_outbound_adapters`.
+**Root cause:** `SecurityErrorWriter` in `adapter.in.web` imported JWT validation types from `security.adapter.out.jwt`.
+**Fix:** Move `JwtValidationException` and `JwtValidationResult` to neutral `security.model` package and update inbound/outbound imports.
+**Prevention:** Shared security request/validation result types used by both filters, inbound error writers, and outbound JWT adapters must live outside `adapter.in` and `adapter.out`.
+
+## 2026-06-12 [SpringBeanWiring] in security/adapter/out/jwt/JwtRequestValidationAdapter.java
+
+**Symptom:** `bootRun` failed while creating `jwtAuthenticationFilter` because `jwtRequestValidationAdapter` reported `No default constructor found`.
+**Root cause:** `JwtRequestValidationAdapter` had more than one constructor, including a test constructor, so Spring did not automatically choose the production constructor and fell back to default construction.
+**Fix:** Add `@Autowired` to the public production constructor that receives `JwtProperties`.
+**Prevention:** When a Spring component has multiple constructors, explicitly annotate the production constructor with `@Autowired`.

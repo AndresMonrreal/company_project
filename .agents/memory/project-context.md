@@ -1,6 +1,6 @@
 # Project Context Memory
 
-Last updated: 2026-06-12
+Last updated: 2026-06-13
 
 This is the living project snapshot for Codex work in this repository. Update this file in place when the architecture, module state, established patterns, or GraphQL context changes.
 
@@ -265,6 +265,8 @@ Current state:
 - If bootstrap is enabled and `admin` does not exist, `SECURITY_BOOTSTRAP_ADMIN_PASSWORD` is required.
 - Existing `admin` is left unchanged and is not overwritten.
 - Optional demo users require both `security.bootstrap.demo-users.enabled=true` and an active profile of `local`, `dev`, or `test`.
+- Optional demo users default to `supervisor`, `operador`, and `consulta`, mapped to `SUPERVISOR`, `OPERADOR`, and `CONSULTA`.
+- Demo user passwords are read from configuration/environment, hashed with BCrypt, and existing demo users are not overwritten.
 - Passwords are hashed through `spring-security-crypto` BCrypt via `PasswordHashingPort`.
 - No Spring Security web configuration, login endpoint, JWT generation/validation, filters, endpoint authorization, frontend, or GraphQL code was added.
 - Domain model and ports live under `security_bootstrap/domain`.

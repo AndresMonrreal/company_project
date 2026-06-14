@@ -313,18 +313,68 @@ Current state:
 
 ## Frontend State
 
-No Angular app has been created yet.
+Angular 21 app scaffolded at `tesla-web-app/` as of 2026-06-13.
 
-Current frontend decision:
+Stack: Angular CLI 21.2.15, Tailwind CSS v4 (PostCSS via `@tailwindcss/postcss`), Apollo Angular, standalone components, Angular signals.
 
-- Future frontend stack is Angular + TypeScript.
-- Future frontend code must live under `frontend/`.
-- Backend remains at the repository root for now.
-- Do not put Angular files under backend `src/`.
-- Do not move the backend into `backend/` unless a separate restructure task is approved.
-- Future Angular app architecture should use `frontend/src/app/core/`, `frontend/src/app/shared/`, and `frontend/src/app/features/`.
-- Angular code should follow official `angular.dev` guidance for style, standalone components, HttpClient, functional interceptors, route guards, reactive forms, testing, and security.
-- Backend hexagonal architecture remains unchanged.
+Builder: `@angular/build:application` (Vite/esbuild). Dev server: `cd tesla-web-app && ng serve`.
+
+### Completed frontend modules
+
+**core/auth/**
+- `auth.models.ts` — `UserSession`, `StoredToken`, `LoginResponse` interfaces
+- `auth-token-storage.ts` — sole localStorage owner; keys `rubbertrace_token` + `rubbertrace_session`
+- `auth-session.ts` — signal-based session state; restores session on page reload
+- `auth-api.client.ts` — typed `POST /api/auth/login` client
+- `auth.service.ts` — login/logout orchestration, `isAuthenticated()`
+
+**core/http/**
+- `api-url.token.ts` — `API_BASE_URL` injection token
+- `auth.interceptor.ts` — functional; adds `Authorization` header only to `API_BASE_URL` requests
+- `auth-error.interceptor.ts` — functional; 401 clears + redirects; 403 preserves session
+
+**core/guards/**
+- `auth.guard.ts` — functional `CanActivateFn`; redirects to `/login` if unauthenticated
+- `role.guard.ts` — functional `CanActivateFn`; reads `data['roles']` from route
+
+**core/layout/**
+- `nav-item.model.ts` — `NavItem` interface + `NAV_ITEMS` constant (7 entries with role restrictions)
+- `sidebar.component.ts` — dark fixed sidebar with role-filtered nav + logout
+- `top-bar.component.ts` — shift placeholder, date, bell, initials avatar
+- `app-shell.component.ts` — persistent shell: sidebar + top-bar + router-outlet
+
+**features/auth/**
+- `login.page.ts` — `LoginPageComponent`; reactive form; 401/network error handling
+
+**features/dashboard/**
+- `dashboard.page.ts` — `DashboardPageComponent`; empty landing page
+
+**features/my-activity/**
+- `models/activity-record.model.ts` — `ActivityRecord`, `ActivityAction`, `ActivityStatus`, badge color maps
+- `data-access/activity-mock.data.ts` — 10 mock records + empty data export
+- `services/activity-filter.service.ts` — scoped filter service with 4 signal filters
+- `components/activity-summary-cards.component.ts` — 4 count cards
+- `components/activity-filter-bar.component.ts` — tab strip + time range + search + reset
+- `components/activity-table.component.ts` — table with badges, empty state, container links
+- `pages/my-activity.page.ts` — page orchestrator; provides `ActivityFilterService`
+
+**shared/ui/**
+- `coming-soon.component.ts` — placeholder for unreleased feature routes
+
+### Route table
+- `/login` — public, `LoginPageComponent` (lazy)
+- `/dashboard` — `authGuard`, `DashboardPageComponent` (lazy), inside `AppShellComponent`
+- `/my-activity` — `authGuard` + `roleGuard` (ADMIN/SUPERVISOR/OPERADOR), `MyActivityPageComponent` (lazy)
+- `/coming-soon` — placeholder for Register Reception/Cut/Molding, Reports, Catalogs
+- `/` → redirects to `/dashboard`
+
+### Frontend conventions
+- Angular 21 file naming: `app.ts` (not `app.component.ts`), inline templates
+- Tailwind v4: `@import "tailwindcss"` in `styles.css`; `postcss.config.mjs` with `@tailwindcss/postcss`
+- Angular signals everywhere: `signal()`, `computed()`, `input()` for component inputs
+- `@for`/`@if` control flow syntax (not `*ngFor`/`*ngIf`)
+- `inject()` function for all DI (no constructor injection)
+- Lazy-loaded routes with `loadComponent()`
 
 ## Existing Ports And Use Cases
 

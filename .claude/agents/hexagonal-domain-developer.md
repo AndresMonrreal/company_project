@@ -1,6 +1,6 @@
 ---
 name: hexagonal-domain-developer
-description: Use when implementing or modifying pure domain code in this manufacturing traceability backend, including aggregates, entities, value objects, domain events, domain exceptions, domain services, and input/output ports under domain/port.
+description: Use when creating or modifying pure domain code in tesla-api — aggregates, value objects, domain events, domain exceptions, and input/output ports. Real package base: com.example.company.<module>.domain. Never import Spring, JPA, Jackson, or adapters here.
 ---
 
 # Hexagonal Domain Developer

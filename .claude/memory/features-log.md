@@ -386,3 +386,54 @@ Append completed features and changes here. Entries are append-only and use ISO 
 **Tests added:** None.
 
 **Notes:** Created only the frontend folder boundary and placeholder files so Git can track the planned Angular structure. The Angular app has not been scaffolded, no dependencies were installed, no backend source files were modified, and no Flyway migrations were modified.
+
+## 2026-06-13 [Angular frontend shell — initialize-angular-frontend-with-shell]
+
+**Files created:** 28 new files under `tesla-web-app/`
+
+Core:
+- `angular.json`, `package.json`, `tsconfig.json`, `postcss.config.mjs`
+- `src/styles.css` (Tailwind v4 `@import "tailwindcss"`)
+- `src/environments/environment.ts`, `src/environments/environment.prod.ts`
+- `src/app/app.ts` (minimal router-outlet)
+- `src/app/core/auth/auth.models.ts`
+- `src/app/core/auth/auth-token-storage.ts`
+- `src/app/core/auth/auth-session.ts`
+- `src/app/core/auth/auth-api.client.ts`
+- `src/app/core/auth/auth.service.ts`
+- `src/app/core/http/api-url.token.ts`
+- `src/app/core/http/auth.interceptor.ts`
+- `src/app/core/http/auth-error.interceptor.ts`
+- `src/app/core/guards/auth.guard.ts`
+- `src/app/core/guards/role.guard.ts`
+- `src/app/core/layout/nav-item.model.ts`
+- `src/app/core/layout/sidebar.component.ts`
+- `src/app/core/layout/top-bar.component.ts`
+- `src/app/core/layout/app-shell.component.ts`
+- `src/app/features/auth/login.page.ts`
+- `src/app/features/dashboard/dashboard.page.ts`
+- `src/app/shared/ui/coming-soon.component.ts`
+- `src/app/features/my-activity/models/activity-record.model.ts`
+- `src/app/features/my-activity/data-access/activity-mock.data.ts`
+- `src/app/features/my-activity/services/activity-filter.service.ts`
+- `src/app/features/my-activity/components/activity-summary-cards.component.ts`
+- `src/app/features/my-activity/components/activity-filter-bar.component.ts`
+- `src/app/features/my-activity/components/activity-table.component.ts`
+- `src/app/features/my-activity/pages/my-activity.page.ts`
+
+**Files modified:**
+- `src/app/app.config.ts` — wired router, HttpClient with interceptors, API_BASE_URL, Apollo
+- `src/app/app.routes.ts` — full route table with shell wrapper and lazy routes
+- `angular.json` — added `fileReplacements` for production environment
+
+**Stack decisions:**
+- Angular CLI 21.2.15 (standalone components, no NgModules)
+- Tailwind CSS v4 with `@tailwindcss/postcss` plugin (NOT v3 config-file approach)
+- Apollo Angular with `provideApollo()` — wired but inactive until GraphQL enabled in tesla-api
+- Angular signals throughout: `signal()`, `computed()`, `input()` — no RxJS state management
+
+**Verification:**
+- `ng build` — clean, zero errors, zero warnings
+- All 5 lazy routes bundled separately (login, dashboard, my-activity, coming-soon, + shell)
+
+**Notes:** `tesla-web-app/` is now a fully functional Angular 21 app. Needs `tesla-api` running at `localhost:8080` for login to work. Visual validation deferred — requires `ng serve` and browser interaction. Tests deferred to a dedicated test spec.

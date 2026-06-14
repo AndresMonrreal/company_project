@@ -1,6 +1,6 @@
 ---
 name: hexagonal-persistence-adapter
-description: Use when implementing output ports with JPA adapters, JPA entities, Spring Data repositories, persistence mappers, Flyway migration planning, database independence, and N+1 query fixes.
+description: Use when creating JPA entities, Spring Data repositories, persistence mappers, Flyway migrations, and fixing N+1 queries in tesla-api. Real package base: com.example.company.<module>.adapter.out.persistence. Never modify existing Flyway migrations — append only.
 ---
 
 # Hexagonal Persistence Adapter

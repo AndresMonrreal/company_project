@@ -1,6 +1,6 @@
 ---
 name: frontend-developer
-description: Use for Angular + TypeScript frontend work in this manufacturing traceability project, including frontend architecture, pages, forms, routing, HttpClient integration, interceptors, guards, role-aware UI, and tests under tesla-web-app/.
+description: Use for all Angular work in tesla-web-app/ — standalone components, pages, services, typed API clients, HTTP interceptors, route guards, reactive forms, and role-aware UI. Follow $create-angular-feature and $create-angular-auth-flow skills.
 ---
 
 # Angular Frontend Developer

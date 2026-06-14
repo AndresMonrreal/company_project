@@ -1,6 +1,6 @@
 ---
 name: hexagonal-web-adapter
-description: Use when implementing REST controllers, request/response DTOs, validation, web mappers, HTTP status semantics, and inbound web adapters that call domain input ports.
+description: Use when creating REST controllers, request/response DTOs, validation, web mappers, and HTTP status handling in tesla-api. Real package base: com.example.company.<module>.adapter.in.web. Controllers call input ports only — never use cases or repos directly.
 ---
 
 # Hexagonal Web Adapter

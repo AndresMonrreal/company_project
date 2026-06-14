@@ -1,6 +1,6 @@
 ---
 name: global-project-guide
-description: Use for project-wide guidance before specs, plans, agents, skills, commands, or broad architecture changes in this Spring Boot hexagonal manufacturing traceability system.
+description: Use before any spec, plan, broad architecture change, or cross-cutting decision. Routes work to the correct agent or skill. Read this before working across both tesla-api and tesla-web-app.
 ---
 
 # Global Project Guide

@@ -1,6 +1,6 @@
 ---
 name: hexagonal-security-reviewer
-description: Use when reviewing SecurityFilterChain, JWT filters, authentication principal mapping, authorization placement, password handling, CORS, and avoiding security leaks into domain code.
+description: Use after any change touching auth, JWT, SecurityFilterChain, HTTP interceptors, Angular guards, password handling, or database queries. Mandatory before merging — not optional. Reviews both tesla-api and tesla-web-app security boundaries.
 ---
 
 # Hexagonal Security Reviewer

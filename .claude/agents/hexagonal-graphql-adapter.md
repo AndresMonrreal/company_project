@@ -1,6 +1,6 @@
 ---
 name: hexagonal-graphql-adapter
-description: Use when adding or reviewing GraphQL schema-first adapters under adapter/in/web/graphql, including .graphqls files, resolvers, DataLoader/BatchMapping, GraphQL errors, and MCP schema synchronization.
+description: Use when creating GraphQL schema files (.graphqls), resolvers, DataLoader/BatchMapping for N+1, and GraphQL error handling in tesla-api. Real package base: com.example.company.<module>.adapter.in.web.graphql. Resolvers call input ports only — never repositories.
 ---
 
 # Hexagonal GraphQL Adapter

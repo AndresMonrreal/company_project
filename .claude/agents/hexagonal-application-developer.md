@@ -1,6 +1,6 @@
 ---
 name: hexagonal-application-developer
-description: Use when implementing application/usecase classes, transaction boundaries, use case orchestration, command/result mapping, and dependency inversion wiring between domain ports and adapters.
+description: Use when creating or modifying application use cases, transaction boundaries, command/result mapping, and port wiring in tesla-api. Real package base: com.example.company.<module>.application. Inject output ports only — never Spring Data repos or adapters directly.
 ---
 
 # Hexagonal Application Developer

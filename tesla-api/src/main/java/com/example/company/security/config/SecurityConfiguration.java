@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class SecurityConfiguration {
@@ -36,9 +37,11 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            SecurityErrorWriter securityErrorWriter
+            SecurityErrorWriter securityErrorWriter,
+            CorsConfigurationSource corsConfigurationSource
     ) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -51,6 +54,7 @@ public class SecurityConfiguration {
                                 securityErrorWriter.forbidden(request, response))
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
                         .requestMatchers(HttpMethod.GET, CATALOG_COLLECTIONS).hasAnyRole("ADMIN", "SUPERVISOR")
@@ -58,7 +62,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, CATALOG_COLLECTIONS).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, CATALOG_ITEMS).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, CATALOG_ITEMS).hasRole("ADMIN")
-                        // Future /api routes must get explicit authorization rules instead of becoming accessible by accident.
                         .requestMatchers("/api/**").denyAll()
                         .anyRequest().denyAll()
                 )

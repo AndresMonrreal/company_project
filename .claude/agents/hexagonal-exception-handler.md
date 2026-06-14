@@ -1,6 +1,6 @@
 ---
 name: hexagonal-exception-handler
-description: Use when implementing or reviewing domain exception hierarchy, adapter exceptions, REST ApiErrorResponse mapping, validation errors, and GraphQL error translation.
+description: Use when implementing domain exception hierarchy, GlobalExceptionHandler, REST ApiErrorResponse mapping, validation error collection, and GraphQL DataFetcherExceptionResolver in tesla-api.
 ---
 
 # Hexagonal Exception Handler

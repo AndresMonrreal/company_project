@@ -10,7 +10,9 @@ Use this skill when the implementation area is not obvious.
 ## Steps
 
 1. Read `AGENTS.md` and `ARCHITECTURE.md`.
-2. Run `rg --files` for the relevant module or feature name.
+2. Search for the relevant module or feature name:
+   - On Windows: `Get-ChildItem -Recurse -Filter "*.java" | Select-String "<module>"`
+   - On Unix: `rg --files | rg "<module>"`
 3. Read the smallest set of files that shows the pattern.
 4. Map current flow:
    - Entry adapter: REST or GraphQL.

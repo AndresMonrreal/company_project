@@ -1,0 +1,86 @@
+import { ActivityRecord } from '../models/activity-record.model';
+
+export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
+  {
+    time: '06:05',
+    container: 'CNT-00481',
+    profile: 'P-36',
+    action: 'RECEPTION',
+    quantities: '120 pcs',
+    status: 'RECEIVED',
+  },
+  {
+    time: '06:42',
+    container: 'CNT-00482',
+    profile: 'P-37',
+    action: 'RECEPTION',
+    quantities: '98 pcs',
+    status: 'IN_CUTTING',
+  },
+  {
+    time: '07:15',
+    container: 'CNT-00483',
+    profile: 'P-38',
+    action: 'CUT',
+    quantities: '85 pcs',
+    status: 'CUT',
+  },
+  {
+    time: '08:03',
+    container: 'CNT-00484',
+    profile: 'P-36',
+    action: 'CUT',
+    quantities: '110 pcs',
+    status: 'SENT_TO_MOLDING',
+  },
+  {
+    time: '09:20',
+    container: 'CNT-00485',
+    profile: 'P-37',
+    action: 'SCRAP',
+    quantities: '12 pcs',
+    status: 'CLOSED',
+  },
+  {
+    time: '10:45',
+    container: 'CNT-00486',
+    profile: 'P-38',
+    action: 'MOLDING_OUTPUT',
+    quantities: '200 pcs',
+    status: 'SENT_TO_MOLDING',
+  },
+  {
+    time: '11:30',
+    container: 'CNT-00487',
+    profile: 'P-36',
+    action: 'SCRAP',
+    quantities: '7 pcs',
+    status: 'CLOSED',
+  },
+  {
+    time: '12:58',
+    container: 'CNT-00488',
+    profile: 'P-37',
+    action: 'MOLDING_OUTPUT',
+    quantities: '175 pcs',
+    status: 'SENT_TO_MOLDING',
+  },
+  {
+    time: '13:40',
+    container: 'CNT-00489',
+    profile: 'P-38',
+    action: 'RECEPTION',
+    quantities: '140 pcs',
+    status: 'RECEIVED',
+  },
+  {
+    time: '14:00',
+    container: 'CNT-00490',
+    profile: 'P-36',
+    action: 'CUT',
+    quantities: '93 pcs',
+    status: 'IN_CUTTING',
+  },
+];
+
+export const ACTIVITY_EMPTY_DATA: ActivityRecord[] = [];

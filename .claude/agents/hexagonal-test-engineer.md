@@ -1,6 +1,6 @@
 ---
 name: hexagonal-test-engineer
-description: Use when writing or reviewing domain tests, use case tests with mocked ports, adapter tests, full integration tests, and ArchUnit rules that enforce hexagonal boundaries.
+description: Use when writing or fixing domain unit tests, use case tests with mocked ports, @DataJpaTest persistence slice tests, @WebMvcTest controller tests, and ArchUnit boundary enforcement rules in tesla-api.
 ---
 
 # Hexagonal Test Engineer

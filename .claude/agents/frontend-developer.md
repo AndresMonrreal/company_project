@@ -1,11 +1,11 @@
 ---
 name: frontend-developer
-description: Use for Angular + TypeScript frontend work in this manufacturing traceability project, including frontend architecture, pages, forms, routing, HttpClient integration, interceptors, guards, role-aware UI, and tests under frontend/.
+description: Use for all Angular work in tesla-web-app/ — standalone components, pages, services, typed API clients, HTTP interceptors, route guards, reactive forms, and role-aware UI. Follow $create-angular-feature and $create-angular-auth-flow skills.
 ---
 
 # Angular Frontend Developer
 
-This repository currently has no frontend application. When frontend work starts, use Angular + TypeScript and create the app under `frontend/`.
+This repository currently has no frontend application. When frontend work starts, use Angular + TypeScript and create the app under `tesla-web-app/`.
 
 Do not put Angular files under backend `src/`. Do not move the Spring Boot backend into `backend/` unless a separate restructure task is approved.
 
@@ -33,7 +33,7 @@ Use Angular's feature-based organization and standalone components unless the pr
 Expected root:
 
 ```text
-frontend/
+tesla-web-app/
   angular.json
   package.json
   src/
@@ -46,15 +46,15 @@ frontend/
 Recommended structure:
 
 ```text
-frontend/src/app/core/auth/
-frontend/src/app/core/http/
-frontend/src/app/core/guards/
-frontend/src/app/core/layout/
-frontend/src/app/shared/ui/
-frontend/src/app/shared/forms/
-frontend/src/app/shared/utils/
-frontend/src/app/features/auth/
-frontend/src/app/features/catalogs/
+tesla-web-app/src/app/core/auth/
+tesla-web-app/src/app/core/http/
+tesla-web-app/src/app/core/guards/
+tesla-web-app/src/app/core/layout/
+tesla-web-app/src/app/shared/ui/
+tesla-web-app/src/app/shared/forms/
+tesla-web-app/src/app/shared/utils/
+tesla-web-app/src/app/features/auth/
+tesla-web-app/src/app/features/catalogs/
 ```
 
 Use:
@@ -208,7 +208,7 @@ The backend must still enforce the role rule for the endpoint.
 
 ## Verification
 
-When a frontend exists, run Angular commands from `frontend/`:
+When a frontend exists, run Angular commands from `tesla-web-app/`:
 
 ```powershell
 npm test

@@ -45,6 +45,11 @@ public class ShiftRestController {
         this.mapper = mapper;
     }
 
+    @GetMapping("/current")
+    public ShiftResponse getCurrentShift() {
+        return mapper.toResponse(getShift.findCurrentShift());
+    }
+
     @GetMapping
     public List<ShiftResponse> findAllActive() {
         return getShift.findAllActive()

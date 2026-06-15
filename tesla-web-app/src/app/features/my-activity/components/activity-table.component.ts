@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   ACTION_BADGE_COLOR,
@@ -6,13 +6,14 @@ import {
   ActivityAction,
   ActivityRecord,
   ActivityStatus,
-  STATUS_BADGE_COLOR,
+  statusBadgeColor,
 } from '../models/activity-record.model';
+import { ActivityDetailModalComponent } from './activity-detail-modal.component';
 
 @Component({
   selector: 'app-activity-table',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ActivityDetailModalComponent],
   template: `
     @if (records().length === 0) {
       <div class="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
@@ -33,13 +34,13 @@ import {
             </tr>
           </thead>
           <tbody>
-            @for (record of records(); track record.container + record.time) {
+            @for (record of records(); track record.id) {
               <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                 <td class="px-4 py-3 text-gray-700">{{ record.time }}</td>
                 <td class="px-4 py-3">
-                  <a [routerLink]="['/coming-soon']" class="text-indigo-600 hover:underline font-mono text-xs">{{ record.container }}</a>
+                  <a [routerLink]="['/coming-soon']" class="text-indigo-600 hover:underline font-mono text-xs">{{ record.containerCode }}</a>
                 </td>
-                <td class="px-4 py-3 text-gray-700">{{ record.profile }}</td>
+                <td class="px-4 py-3 text-gray-700">{{ record.profileCode }}</td>
                 <td class="px-4 py-3">
                   <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + actionBadgeColor(record.action)">
                     {{ actionLabel(record.action) }}
@@ -47,12 +48,19 @@ import {
                 </td>
                 <td class="px-4 py-3 text-gray-700">{{ record.quantities }}</td>
                 <td class="px-4 py-3">
-                  <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + statusBadgeColor(record.status)">
-                    {{ record.status }}
-                  </span>
+                  @if (record.status) {
+                    <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + getStatusBadgeColor(record.status)">
+                      {{ record.status }}
+                    </span>
+                  }
                 </td>
                 <td class="px-4 py-3 text-center">
-                  <button type="button" class="text-gray-400 hover:text-gray-700">👁</button>
+                  <button type="button" (click)="openDetail(record)" class="text-gray-400 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </button>
                 </td>
               </tr>
             }
@@ -60,10 +68,25 @@ import {
         </table>
       </div>
     }
+
+    <app-activity-detail-modal
+      [record]="selectedRecord()"
+      (close)="closeDetail()"
+    />
   `,
 })
 export class ActivityTableComponent {
   readonly records = input<ActivityRecord[]>([]);
+
+  protected readonly selectedRecord = signal<ActivityRecord | null>(null);
+
+  protected openDetail(record: ActivityRecord): void {
+    this.selectedRecord.set(record);
+  }
+
+  protected closeDetail(): void {
+    this.selectedRecord.set(null);
+  }
 
   protected actionBadgeColor(action: ActivityAction): string {
     return ACTION_BADGE_COLOR[action];
@@ -73,7 +96,7 @@ export class ActivityTableComponent {
     return ACTION_LABEL[action];
   }
 
-  protected statusBadgeColor(status: ActivityStatus): string {
-    return STATUS_BADGE_COLOR[status];
+  protected getStatusBadgeColor(status: ActivityStatus | null): string {
+    return statusBadgeColor(status);
   }
 }

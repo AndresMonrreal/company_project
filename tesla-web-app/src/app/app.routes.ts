@@ -24,6 +24,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/my-activity/pages/my-activity.page').then((m) => m.MyActivityPageComponent),
       },
       {
+        path: 'register-reception',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'] },
+        loadComponent: () => import('./features/register-reception/pages/register-reception.page').then((m) => m.RegisterReceptionPageComponent),
+      },
+      {
         path: 'coming-soon',
         loadComponent: () => import('./shared/ui/coming-soon.component').then((m) => m.ComingSoonComponent),
       },

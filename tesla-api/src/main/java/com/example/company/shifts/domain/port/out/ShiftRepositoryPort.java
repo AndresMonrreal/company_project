@@ -1,5 +1,6 @@
 package com.example.company.shifts.domain.port.out;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,8 @@ public interface ShiftRepositoryPort {
     boolean existsByName(String name);
 
     boolean existsByNameAndIdNot(String name, Long id);
+
+    Optional<Shift> findCurrentShift(LocalTime currentTime);
 
     Shift save(Shift shift);
 }

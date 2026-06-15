@@ -75,7 +75,12 @@ tesla-api/src/main/java/com/example/company/<module>/
 | `roles` | Complete — catalog CRUD only, no auth/seeding |
 | `security_bootstrap` | Complete — role seeding (V2 migration) + admin/demo user bootstrap |
 | `auth` | Complete — `POST /api/auth/login`, BCrypt verification, HMAC-SHA256 JWT |
-| `cutting` | Partial — `CuttingQuantities` value object + domain invariant only |
+| `inventory` | Complete — domain, ports, JPA adapter (no REST — internal only) |
+| `reception` | Complete — domain, ports, use cases, REST (POST + GET /my), JPA |
+| `cutting` | Complete — CuttingQuantities + CuttingRecord, ports, use cases, REST, JPA |
+| `scrap` | Complete — domain, ports, use cases, REST (POST + GET /my), JPA |
+| `molding` | Complete — domain, ports, use cases, REST (POST + GET /my), JPA |
+| `activity` | Complete — GetMyActivityService, ActivityPersistenceAdapter (4 JPQL), ShiftWindowAdapter, REST GET /my |
 | `shared` | Complete — `DomainException`, `GlobalExceptionHandler`, `HealthController` |
 
 ## Critical business rule

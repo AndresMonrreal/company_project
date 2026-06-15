@@ -7,4 +7,6 @@ public interface GetShiftUseCase {
     List<ShiftResult> findAllActive();
 
     ShiftResult findById(Long id);
+
+    ShiftResult findCurrentShift();
 }

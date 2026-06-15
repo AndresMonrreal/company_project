@@ -1,5 +1,7 @@
 package com.example.company.cutting.domain.model;
 
+import com.example.company.cutting.domain.exception.CuttingQuantityInvariantException;
+
 public record CuttingQuantities(
         int initialQuantity,
         int goodQuantity,
@@ -17,7 +19,7 @@ public record CuttingQuantities(
             throw new IllegalArgumentException("scrap_quantity must not be negative");
         }
         if (initialQuantity != goodQuantity + scrapQuantity) {
-            throw new IllegalArgumentException("initial_quantity must equal good_quantity + scrap_quantity");
+            throw new CuttingQuantityInvariantException();
         }
     }
 }

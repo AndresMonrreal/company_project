@@ -1,5 +1,6 @@
 package com.example.company.shifts.application.usecase;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import com.example.company.shifts.application.mapper.ShiftResultMapper;
@@ -33,5 +34,12 @@ public class GetShiftService implements GetShiftUseCase {
         return shiftRepository.findActiveById(id)
                 .map(ShiftResultMapper::toResult)
                 .orElseThrow(() -> new ShiftNotFoundException(id));
+    }
+
+    @Override
+    public ShiftResult findCurrentShift() {
+        return shiftRepository.findCurrentShift(LocalTime.now())
+                .map(ShiftResultMapper::toResult)
+                .orElseThrow(() -> new ShiftNotFoundException(0L));
     }
 }

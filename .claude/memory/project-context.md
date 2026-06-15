@@ -149,15 +149,92 @@ Current state:
 - Domain tests exist for creation, required container type id, blank-code rejection, and soft delete behavior.
 - Focused application use case tests exist for create, get/list, update, duplicate-code rejection, missing-record rejection, and soft delete behavior.
 
-### cutting
+### inventory
 
-`cutting` currently has the domain value object for the core quantity invariant.
+`inventory` is implemented as a support module providing output ports for `reception` and `cutting`.
 
 Current state:
 
-- `CuttingQuantities` exists under `cutting/domain/model`.
-- Domain tests exist for the quantity rule.
-- Future cutting use cases must construct `CuttingQuantities` before saving any cutting record.
+- `InventoryItemStatus` enum: `AVAILABLE`, `CUT`.
+- `InventoryItem` aggregate in `inventory/domain/model`.
+- `InventoryItemNotFoundException` with error code `inventory.not-found`.
+- Output ports: `InventoryItemCreationPort`, `InventoryItemUpdatePort`, `InventoryItemRepositoryPort`.
+- JPA entity, Spring Data repo, persistence mapper, and adapter in `inventory/adapter/out/persistence`.
+- No REST endpoints — internal-only module.
+
+### reception
+
+`reception` is implemented as a complete operational module backed by the `receptions` table in V1 schema.
+
+Current state:
+
+- `ReceptionStatus` enum: `RECEIVED`.
+- `Reception` aggregate in `reception/domain/model`.
+- `ReceptionNotFoundException` with error code `reception.not-found`.
+- Input ports: `RegisterReceptionUseCase`, `GetMyReceptionsUseCase`.
+- Output port: `ReceptionRepositoryPort`.
+- Application services: `RegisterReceptionService` (injects `InventoryItemCreationPort`), `GetMyReceptionsService` (injects `ShiftRepositoryPort`).
+- REST: `POST /api/receptions` (201), `GET /api/receptions/my?shiftId={id}`.
+- JPQL JOIN queries to resolve `containerCode` and `profileCode` from `containers` and `profiles`.
+
+### cutting
+
+`cutting` is implemented as a complete operational module backed by the `cutting_records` table in V1 schema.
+
+Current state:
+
+- `CuttingQuantities` value object enforces `initial = good + scrap` invariant.
+- Invariant violation throws `CuttingQuantityInvariantException` (errorCode `cutting.quantity-invariant`, 422).
+- `CuttingRecord` aggregate in `cutting/domain/model`.
+- `CuttingRecordNotFoundException` with error code `cutting.not-found`.
+- Input ports: `RegisterCutUseCase`, `GetMyCuttingRecordsUseCase`.
+- Output port: `CuttingRepositoryPort`.
+- Application services: `RegisterCutService` (injects `InventoryItemUpdatePort`), `GetMyCuttingRecordsService` (injects `ShiftRepositoryPort`).
+- REST: `POST /api/cutting` (201), `GET /api/cutting/my?shiftId={id}`.
+- Native SQL JOIN query: `cutting_records → inventory_items → receptions → containers + profiles + machines`.
+- `machineId` column is `machine_Id` (mixed-case) in V1 schema — native query uses quoted column name.
+
+### scrap
+
+`scrap` is implemented as a complete operational module backed by the `scrap_records` table in V1 schema.
+
+Current state:
+
+- `ScrapRecord` aggregate in `scrap/domain/model`.
+- `ScrapRecordNotFoundException` with error code `scrap.not-found`.
+- Input ports: `RegisterScrapUseCase`, `GetMyScrapUseCase`.
+- Output ports: `ScrapRepositoryPort`, `CuttingRecordExistsPort`.
+- Application services: `RegisterScrapService`, `GetMyScrapService`.
+- REST: `POST /api/scrap` (201), `GET /api/scrap/my?shiftId={id}`.
+- No `version` column on `scrap_records` (absent in V1 schema).
+
+### molding
+
+`molding` is implemented as a complete operational module backed by the `molding_outputs` table in V1 schema.
+
+Current state:
+
+- `MoldingOutput` aggregate in `molding/domain/model`.
+- `MoldingOutputNotFoundException` with error code `molding.not-found`.
+- Input ports: `RegisterMoldingOutputUseCase`, `GetMyMoldingOutputsUseCase`.
+- Output ports: `MoldingOutputRepositoryPort`, `CuttingRecordExistsPort`.
+- Application services: `RegisterMoldingOutputService`, `GetMyMoldingOutputsService`.
+- REST: `POST /api/molding-outputs` (201), `GET /api/molding-outputs/my?shiftId={id}`.
+- No `version` column on `molding_outputs` (absent in V1 schema).
+
+### activity
+
+`activity` is implemented as a cross-cutting query module.
+
+Current state:
+
+- `ActivityItem` domain record: `time (HH:mm)`, `containerCode`, `profileCode`, `action`, `quantities`, `status (nullable)`, `timestamp (for sorting)`.
+- Input port: `GetMyActivityUseCase`.
+- Output ports: `ActivityQueryPort` (4 methods), `ShiftWindowPort` (inner `ShiftWindow` record).
+- Application service: `GetMyActivityService` — merges all 4 activity streams, sorts by `timestamp` ascending.
+- Persistence: `ActivityPersistenceAdapter` (4 native SQL queries via `EntityManager`), `ShiftWindowAdapter` (native SQL via `EntityManager` — avoids cross-adapter dependency).
+- REST: `GET /api/activity/my?shiftId={id}` — returns `ActivityResponse[]` (no `timestamp` field).
+- `ActivityResponse` DTO excludes `timestamp` field.
 
 ### container_types
 
@@ -361,11 +438,18 @@ Builder: `@angular/build:application` (Vite/esbuild). Dev server: `cd tesla-web-
 **shared/ui/**
 - `coming-soon.component.ts` — placeholder for unreleased feature routes
 
+**features/register-reception/**
+- `models/register-reception.models.ts` — `ContainerOption`, `ProfileOption`, `RegisterReceptionRequest`, `ReceptionSuccessResponse` interfaces
+- `data-access/register-reception-api.client.ts` — typed API client: `GET /api/containers`, `GET /api/profiles`, `POST /api/receptions`
+- `services/register-reception.service.ts` — delegates to API client; `loadContainers()`, `loadProfiles()`, `register()`
+- `pages/register-reception.page.ts` — `RegisterReceptionPageComponent`; reactive form; `forkJoin` catalog load; 400/401/403/409 error handling; 3s success auto-dismiss
+
 ### Route table
 - `/login` — public, `LoginPageComponent` (lazy)
 - `/dashboard` — `authGuard`, `DashboardPageComponent` (lazy), inside `AppShellComponent`
 - `/my-activity` — `authGuard` + `roleGuard` (ADMIN/SUPERVISOR/OPERADOR), `MyActivityPageComponent` (lazy)
-- `/coming-soon` — placeholder for Register Reception/Cut/Molding, Reports, Catalogs
+- `/register-reception` — `authGuard` + `roleGuard` (ADMIN/SUPERVISOR/OPERADOR), `RegisterReceptionPageComponent` (lazy)
+- `/coming-soon` — placeholder for Register Cut/Molding, Reports, Catalogs
 - `/` → redirects to `/dashboard`
 
 ### Frontend conventions

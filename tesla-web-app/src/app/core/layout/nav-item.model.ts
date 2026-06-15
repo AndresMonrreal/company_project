@@ -17,7 +17,7 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     label: 'Register Reception',
-    route: '/coming-soon',
+    route: '/register-reception',
     roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'],
   },
   {

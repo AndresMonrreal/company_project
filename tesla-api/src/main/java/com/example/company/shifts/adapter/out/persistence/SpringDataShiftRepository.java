@@ -21,5 +21,5 @@ public interface SpringDataShiftRepository extends JpaRepository<ShiftJpaEntity,
     @Query("SELECT s FROM ShiftJpaEntity s WHERE s.active = true AND " +
            "((s.startTime <= :now AND s.endTime > :now) OR " +
            "(s.startTime > s.endTime AND (s.startTime <= :now OR s.endTime > :now)))")
-    Optional<ShiftJpaEntity> findCurrentByTime(@Param("now") LocalTime now);
+    List<ShiftJpaEntity> findCurrentByTime(@Param("now") LocalTime now);
 }

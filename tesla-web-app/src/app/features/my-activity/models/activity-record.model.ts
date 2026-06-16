@@ -2,12 +2,13 @@ export type ActivityAction = 'RECEPTION' | 'CUT' | 'SCRAP' | 'MOLDING_OUTPUT';
 export type ActivityStatus = 'RECEIVED' | 'CUT' | 'CLOSED' | 'SENT_TO_MOLDING' | 'IN_CUTTING';
 
 export interface ActivityRecord {
+  id: number;
   time: string;
-  container: string;
-  profile: string;
+  containerCode: string;
+  profileCode: string;
   action: ActivityAction;
   quantities: string;
-  status: ActivityStatus;
+  status: ActivityStatus | null;
 }
 
 export const ACTION_BADGE_COLOR: Record<ActivityAction, string> = {
@@ -24,10 +25,14 @@ export const ACTION_LABEL: Record<ActivityAction, string> = {
   MOLDING_OUTPUT: 'Molding Output',
 };
 
-export const STATUS_BADGE_COLOR: Record<ActivityStatus, string> = {
-  RECEIVED: 'bg-blue-100 text-blue-800',
-  IN_CUTTING: 'bg-yellow-100 text-yellow-800',
-  CUT: 'bg-green-100 text-green-800',
-  SENT_TO_MOLDING: 'bg-purple-100 text-purple-800',
-  CLOSED: 'bg-gray-100 text-gray-600',
-};
+export function statusBadgeColor(status: ActivityStatus | null): string {
+  if (!status) return '';
+  const map: Record<ActivityStatus, string> = {
+    RECEIVED: 'bg-blue-100 text-blue-800',
+    IN_CUTTING: 'bg-yellow-100 text-yellow-800',
+    CUT: 'bg-green-100 text-green-800',
+    SENT_TO_MOLDING: 'bg-purple-100 text-purple-800',
+    CLOSED: 'bg-gray-100 text-gray-600',
+  };
+  return map[status] ?? '';
+}

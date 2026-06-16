@@ -5,8 +5,7 @@ import {
   ACTION_LABEL,
   ActivityAction,
   ActivityRecord,
-  ActivityStatus,
-  STATUS_BADGE_COLOR,
+  statusBadgeColor,
 } from '../models/activity-record.model';
 
 @Component({
@@ -33,13 +32,13 @@ import {
             </tr>
           </thead>
           <tbody>
-            @for (record of records(); track record.container + record.time) {
+            @for (record of records(); track record.id) {
               <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                 <td class="px-4 py-3 text-gray-700">{{ record.time }}</td>
                 <td class="px-4 py-3">
-                  <a [routerLink]="['/coming-soon']" class="text-indigo-600 hover:underline font-mono text-xs">{{ record.container }}</a>
+                  <a [routerLink]="['/coming-soon']" class="text-indigo-600 hover:underline font-mono text-xs">{{ record.containerCode }}</a>
                 </td>
-                <td class="px-4 py-3 text-gray-700">{{ record.profile }}</td>
+                <td class="px-4 py-3 text-gray-700">{{ record.profileCode }}</td>
                 <td class="px-4 py-3">
                   <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + actionBadgeColor(record.action)">
                     {{ actionLabel(record.action) }}
@@ -47,12 +46,14 @@ import {
                 </td>
                 <td class="px-4 py-3 text-gray-700">{{ record.quantities }}</td>
                 <td class="px-4 py-3">
-                  <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + statusBadgeColor(record.status)">
-                    {{ record.status }}
-                  </span>
+                  @if (record.status) {
+                    <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + getStatusBadgeColor(record.status)">
+                      {{ record.status }}
+                    </span>
+                  }
                 </td>
                 <td class="px-4 py-3 text-center">
-                  <button type="button" class="text-gray-400 hover:text-gray-700">👁</button>
+                  <button type="button" class="text-gray-400 hover:text-gray-700">&#x1F441;</button>
                 </td>
               </tr>
             }
@@ -73,7 +74,5 @@ export class ActivityTableComponent {
     return ACTION_LABEL[action];
   }
 
-  protected statusBadgeColor(status: ActivityStatus): string {
-    return STATUS_BADGE_COLOR[status];
-  }
+  protected getStatusBadgeColor = statusBadgeColor;
 }

@@ -26,7 +26,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
         String timeFilter = overnight
                 ? "CAST(r.received_at AS TIME) >= :startTime OR CAST(r.received_at AS TIME) <= :endTime"
                 : "CAST(r.received_at AS TIME) BETWEEN :startTime AND :endTime";
-        String sql = "SELECT r.id, c.code, p.code, r.received_quantity, r.received_at " +
+        String sql = "SELECT r.id, c.code, p.code, r.received_quantity, r.status, r.received_at " +
                 "FROM receptions r " +
                 "JOIN containers c ON r.container_id = c.id " +
                 "JOIN profiles p ON r.profile_id = p.id " +
@@ -102,10 +102,11 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 (String) row[1],
                 (String) row[2],
                 ActivityAction.RECEPTION,
-                toLocalDateTime(row[4]),
+                toLocalDateTime(row[5]),
                 ((Number) row[3]).intValue(),
                 null,
-                null
+                null,
+                (String) row[4]
         );
     }
 
@@ -118,7 +119,8 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 toLocalDateTime(row[6]),
                 ((Number) row[3]).intValue(),
                 ((Number) row[4]).intValue(),
-                ((Number) row[5]).intValue()
+                ((Number) row[5]).intValue(),
+                null
         );
     }
 
@@ -130,6 +132,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 ActivityAction.SCRAP,
                 toLocalDateTime(row[4]),
                 ((Number) row[3]).intValue(),
+                null,
                 null,
                 null
         );
@@ -143,6 +146,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 ActivityAction.MOLDING_OUTPUT,
                 toLocalDateTime(row[4]),
                 ((Number) row[3]).intValue(),
+                null,
                 null,
                 null
         );

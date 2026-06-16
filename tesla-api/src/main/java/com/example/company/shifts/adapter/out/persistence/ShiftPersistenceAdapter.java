@@ -47,7 +47,7 @@ public class ShiftPersistenceAdapter implements ShiftRepositoryPort {
 
     @Override
     public Optional<Shift> findCurrentByTime(LocalTime now) {
-        return shiftRepository.findCurrentByTime(now).map(mapper::toDomain);
+        return shiftRepository.findCurrentByTime(now).stream().findFirst().map(mapper::toDomain);
     }
 
     @Override

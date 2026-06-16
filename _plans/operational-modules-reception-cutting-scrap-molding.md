@@ -17,7 +17,7 @@ This plan implements the six operational modules that form the core traceability
 ## Phase 1 — Inventory Module
 
 ### 1.1 InventoryItemStatus enum
-**File:** `inventory/domain/model/InventoryItemStatus.java`
+**File:** `inventory/domain/model/InventoryItemStatus.java`.
 
 Pure Java enum with values `AVAILABLE` and `CUT`. No imports .
 

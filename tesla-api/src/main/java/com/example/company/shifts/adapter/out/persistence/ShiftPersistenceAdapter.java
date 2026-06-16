@@ -1,5 +1,6 @@
 package com.example.company.shifts.adapter.out.persistence;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,11 @@ public class ShiftPersistenceAdapter implements ShiftRepositoryPort {
     @Override
     public boolean existsByNameAndIdNot(String name, Long id) {
         return shiftRepository.existsByNameAndIdNot(name, id);
+    }
+
+    @Override
+    public Optional<Shift> findCurrentByTime(LocalTime now) {
+        return shiftRepository.findCurrentByTime(now).map(mapper::toDomain);
     }
 
     @Override

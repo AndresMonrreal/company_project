@@ -11,6 +11,7 @@ import com.example.company.shifts.domain.port.in.GetShiftUseCase;
 import com.example.company.shifts.domain.port.in.UpdateShiftUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,14 @@ public class ShiftRestController {
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<ShiftResponse> findCurrent() {
+        return getShift.findCurrent()
+                .map(mapper::toResponse)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
     }
 
     @GetMapping("/{id}")

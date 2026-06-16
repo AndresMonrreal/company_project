@@ -1,4 +1,4 @@
-# Plan: Operational Modules — Reception, Cutting, Scrap, Molding
+    # Plan: Operational Modules — Reception, Cutting, Scrap, Molding
 
 ## Context
 
@@ -19,7 +19,7 @@ This plan implements the six operational modules that form the core traceability
 ### 1.1 InventoryItemStatus enum
 **File:** `inventory/domain/model/InventoryItemStatus.java`
 
-Pure Java enum with values `AVAILABLE` and `CUT`. No imports.
+Pure Java enum with values `AVAILABLE` and `CUT`. No imports .
 
 ### 1.2 InventoryItem domain record
 **File:** `inventory/domain/model/InventoryItem.java`

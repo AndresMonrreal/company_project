@@ -7,4 +7,6 @@ public interface GetReceptionUseCase {
     ReceptionResult findById(Long id);
 
     List<ReceptionResult> findByOperatorAndShift(Long operatorId, Long shiftId);
+
+    ReceptionResult findByIdWithCodes(Long id);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.company.reception.domain.model.Reception;
+import com.example.company.reception.domain.port.in.ReceptionResult;
 
 public interface ReceptionRepositoryPort {
 
@@ -14,4 +15,6 @@ public interface ReceptionRepositoryPort {
 
     List<Reception> findByOperatorAndTimeWindow(Long operatorId, LocalTime startTime, LocalTime endTime,
                                                 boolean overnight);
+
+    Optional<ReceptionResult> findByIdWithCodes(Long id);
 }

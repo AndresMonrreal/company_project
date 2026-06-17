@@ -59,14 +59,14 @@ public class ReceptionRestController {
 
     @GetMapping("/{id}")
     public ReceptionResponse findById(@PathVariable Long id) {
-        return toResponse(getReception.findById(id));
+        return toResponse(getReception.findByIdWithCodes(id));
     }
 
     private ReceptionResponse toResponse(ReceptionResult result) {
         return new ReceptionResponse(
                 result.id(),
-                result.containerId(),
-                result.profileId(),
+                result.containerCode(),
+                result.profileCode(),
                 result.operatorId(),
                 result.lot(),
                 result.receivedQuantity(),

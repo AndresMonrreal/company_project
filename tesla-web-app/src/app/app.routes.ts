@@ -24,6 +24,33 @@ export const routes: Routes = [
         loadComponent: () => import('./features/my-activity/pages/my-activity.page').then((m) => m.MyActivityPageComponent),
       },
       {
+        path: 'register-reception',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'] },
+        loadComponent: () =>
+          import('./features/register-reception/pages/register-reception.page').then(
+            (m) => m.RegisterReceptionPageComponent
+          ),
+      },
+      {
+        path: 'register-cut',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'] },
+        loadComponent: () =>
+          import('./features/register-cut/pages/register-cut.page').then(
+            (m) => m.RegisterCutPageComponent
+          ),
+      },
+      {
+        path: 'register-molding-output',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'] },
+        loadComponent: () =>
+          import('./features/register-molding-output/pages/register-molding-output.page').then(
+            (m) => m.RegisterMoldingOutputPageComponent
+          ),
+      },
+      {
         path: 'coming-soon',
         loadComponent: () => import('./shared/ui/coming-soon.component').then((m) => m.ComingSoonComponent),
       },

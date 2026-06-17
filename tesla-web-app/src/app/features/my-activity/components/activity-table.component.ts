@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   ACTION_BADGE_COLOR,
@@ -7,11 +7,12 @@ import {
   ActivityRecord,
   statusBadgeColor,
 } from '../models/activity-record.model';
+import { ActivityDetailModalComponent } from './activity-detail-modal.component';
 
 @Component({
   selector: 'app-activity-table',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ActivityDetailModalComponent],
   template: `
     @if (records().length === 0) {
       <div class="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
@@ -53,7 +54,7 @@ import {
                   }
                 </td>
                 <td class="px-4 py-3 text-center">
-                  <button type="button" class="text-gray-400 hover:text-gray-700">&#x1F441;</button>
+                  <button type="button" (click)="selectedRecord.set(record); showDetail.set(true)" class="text-gray-400 hover:text-gray-700">&#x1F441;</button>
                 </td>
               </tr>
             }
@@ -61,10 +62,14 @@ import {
         </table>
       </div>
     }
+    <app-activity-detail-modal [record]="selectedRecord()" [visible]="showDetail()" (closed)="showDetail.set(false)" />
   `,
 })
 export class ActivityTableComponent {
   readonly records = input<ActivityRecord[]>([]);
+
+  protected readonly selectedRecord = signal<ActivityRecord | null>(null);
+  protected readonly showDetail = signal(false);
 
   protected actionBadgeColor(action: ActivityAction): string {
     return ACTION_BADGE_COLOR[action];

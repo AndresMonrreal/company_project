@@ -76,7 +76,7 @@ public class CuttingRestController {
 
     @GetMapping("/{id}")
     public CuttingResponse findById(@PathVariable Long id) {
-        return toResponse(getCutting.findById(id));
+        return toResponse(getCutting.findByIdWithCodes(id));
     }
 
     private CuttingResponse toResponse(CuttingResult result) {
@@ -89,7 +89,10 @@ public class CuttingRestController {
                 result.initialQuantity(),
                 result.goodQuantity(),
                 result.scrapQuantity(),
-                result.cutAt()
+                result.cutAt(),
+                result.containerCode(),
+                result.profileCode(),
+                result.machineName()
         );
     }
 }

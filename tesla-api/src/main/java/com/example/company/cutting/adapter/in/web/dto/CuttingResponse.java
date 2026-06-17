@@ -11,6 +11,9 @@ public record CuttingResponse(
         int initialQuantity,
         int goodQuantity,
         int scrapQuantity,
-        LocalDateTime cutAt
+        LocalDateTime cutAt,
+        String containerCode,
+        String profileCode,
+        String machineName
 ) {
 }

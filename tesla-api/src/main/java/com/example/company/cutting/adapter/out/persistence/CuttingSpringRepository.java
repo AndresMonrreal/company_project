@@ -23,4 +23,18 @@ public interface CuttingSpringRepository extends JpaRepository<CuttingRecordJpaE
             LIMIT 1
             """, nativeQuery = true)
     Optional<Object[]> findAvailableByContainerCode(@Param("containerCode") String containerCode);
+
+    @Query(value = """
+            SELECT cr.id, cr.initial_quantity, cr.good_quantity, cr.scrap_quantity, cr.cut_at,
+                   c.code AS container_code, p.code AS profile_code, m.name AS machine_name,
+                   cr.inventory_item_id, cr.machine_id, cr.operator_id, cr.shift_id
+            FROM cutting_records cr
+            JOIN inventory_items ii ON cr.inventory_item_id = ii.id
+            JOIN receptions r ON ii.reception_id = r.id
+            JOIN containers c ON r.container_id = c.id
+            JOIN profiles p ON r.profile_id = p.id
+            JOIN machines m ON cr.machine_id = m.id
+            WHERE cr.id = :id
+            """, nativeQuery = true)
+    Optional<Object[]> findByIdWithCodes(@Param("id") Long id);
 }

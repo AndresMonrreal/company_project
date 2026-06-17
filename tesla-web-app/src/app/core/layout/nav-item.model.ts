@@ -17,17 +17,17 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     label: 'Register Reception',
-    route: '/coming-soon',
+    route: '/register-reception',
     roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'],
   },
   {
     label: 'Register Cut',
-    route: '/coming-soon',
+    route: '/register-cut',
     roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'],
   },
   {
     label: 'Register Molding Output',
-    route: '/coming-soon',
+    route: '/register-molding-output',
     roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'],
   },
   {

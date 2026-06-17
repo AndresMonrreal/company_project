@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.example.company.cutting.domain.model.AvailableCuttingResult;
 import com.example.company.cutting.domain.model.CuttingRecord;
+import com.example.company.cutting.domain.port.in.CuttingResult;
 
 public interface CuttingRepositoryPort {
 
@@ -15,4 +16,6 @@ public interface CuttingRepositoryPort {
     List<CuttingRecord> findByOperatorAndShift(Long operatorId, Long shiftId);
 
     Optional<AvailableCuttingResult> findAvailableByContainerCode(String containerCode);
+
+    Optional<CuttingResult> findByIdWithCodes(Long id);
 }

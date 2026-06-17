@@ -11,4 +11,6 @@ public interface GetCuttingUseCase {
     List<CuttingResult> findByOperatorAndShift(Long operatorId, Long shiftId);
 
     AvailableCuttingResult findAvailableByContainerCode(String containerCode);
+
+    CuttingResult findByIdWithCodes(Long id);
 }

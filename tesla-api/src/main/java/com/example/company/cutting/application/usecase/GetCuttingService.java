@@ -29,6 +29,12 @@ public class GetCuttingService implements GetCuttingUseCase {
     }
 
     @Override
+    public CuttingResult findByIdWithCodes(Long id) {
+        return cuttingRepository.findByIdWithCodes(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cutting record not found: " + id));
+    }
+
+    @Override
     public List<CuttingResult> findByOperatorAndShift(Long operatorId, Long shiftId) {
         return cuttingRepository.findByOperatorAndShift(operatorId, shiftId)
                 .stream()
@@ -52,7 +58,10 @@ public class GetCuttingService implements GetCuttingUseCase {
                 record.quantities().initialQuantity(),
                 record.quantities().goodQuantity(),
                 record.quantities().scrapQuantity(),
-                record.cutAt()
+                record.cutAt(),
+                null,
+                null,
+                null
         );
     }
 }

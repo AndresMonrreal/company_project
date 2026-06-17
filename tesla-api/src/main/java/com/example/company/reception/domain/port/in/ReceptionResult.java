@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public record ReceptionResult(
         Long id,
-        Long containerId,
-        Long profileId,
+        String containerCode,
+        String profileCode,
         Long operatorId,
         String lot,
         int receivedQuantity,

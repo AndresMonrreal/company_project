@@ -83,7 +83,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="profileSubmitting() || profileCreateForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-                      @if (profileSubmitting()) { Saving… } @else { Save }
+                      @if (profileSubmitting()) { Saving... } @else { Save }
                     </button>
                     <button type="button" (click)="cancelProfileForm()"
                       class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -111,7 +111,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="profileSubmitting() || profileEditForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-                      @if (profileSubmitting()) { Saving… } @else { Update }
+                      @if (profileSubmitting()) { Saving... } @else { Update }
                     </button>
                     <button type="button" (click)="cancelProfileForm()"
                       class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -194,7 +194,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="machineSubmitting() || machineForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-                      @if (machineSubmitting()) { Saving… } @else { {{ editingMachineId() !== null ? 'Update' : 'Save' }} }
+                      @if (machineSubmitting()) { Saving... } @else { {{ editingMachineId() !== null ? 'Update' : 'Save' }} }
                     </button>
                     <button type="button" (click)="cancelMachineForm()"
                       class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -283,7 +283,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   <div class="sm:col-span-3 flex gap-2">
                     <button type="submit" [disabled]="shiftSubmitting() || shiftForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-                      @if (shiftSubmitting()) { Saving… } @else { {{ editingShiftId() !== null ? 'Update' : 'Save' }} }
+                      @if (shiftSubmitting()) { Saving... } @else { {{ editingShiftId() !== null ? 'Update' : 'Save' }} }
                     </button>
                     <button type="button" (click)="cancelShiftForm()"
                       class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -366,7 +366,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="containerTypeSubmitting() || containerTypeForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-                      @if (containerTypeSubmitting()) { Saving… } @else { {{ editingContainerTypeId() !== null ? 'Update' : 'Save' }} }
+                      @if (containerTypeSubmitting()) { Saving... } @else { {{ editingContainerTypeId() !== null ? 'Update' : 'Save' }} }
                     </button>
                     <button type="button" (click)="cancelContainerTypeForm()"
                       class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -455,7 +455,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="containerSubmitting() || containerForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
-                      @if (containerSubmitting()) { Saving… } @else { {{ editingContainerId() !== null ? 'Update' : 'Save' }} }
+                      @if (containerSubmitting()) { Saving... } @else { {{ editingContainerId() !== null ? 'Update' : 'Save' }} }
                     </button>
                     <button type="button" (click)="cancelContainerForm()"
                       class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
@@ -497,6 +497,27 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
               </table>
             </div>
           }
+        </div>
+      }
+
+      @if (confirmModalVisible()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+             (click)="cancelConfirm()">
+          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4"
+               (click)="$event.stopPropagation()">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Confirm Action</h3>
+            <p class="text-sm text-gray-600 mb-6">{{ confirmMessage() }}</p>
+            <div class="flex gap-3 justify-end">
+              <button type="button" (click)="cancelConfirm()"
+                class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                Cancel
+              </button>
+              <button type="button" (click)="executeConfirm()"
+                class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition-colors">
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       }
     </div>
@@ -560,6 +581,11 @@ export class CatalogsPageComponent implements OnInit {
   readonly showContainerForm = signal(false);
   readonly editingContainerId = signal<number | null>(null);
   readonly containerSubmitting = signal(false);
+
+  // Confirm modal state
+  readonly confirmModalVisible = signal(false);
+  readonly confirmMessage = signal('');
+  readonly confirmAction = signal<(() => void) | null>(null);
 
   // Forms
   readonly profileCreateForm = this.fb.group({
@@ -633,6 +659,24 @@ export class CatalogsPageComponent implements OnInit {
     setTimeout(() => setter(null), 3000);
   }
 
+  openConfirm(message: string, action: () => void): void {
+    this.confirmMessage.set(message);
+    this.confirmAction.set(action);
+    this.confirmModalVisible.set(true);
+  }
+
+  executeConfirm(): void {
+    const action = this.confirmAction();
+    if (action) action();
+    this.confirmModalVisible.set(false);
+    this.confirmAction.set(null);
+  }
+
+  cancelConfirm(): void {
+    this.confirmModalVisible.set(false);
+    this.confirmAction.set(null);
+  }
+
   // ===== PROFILES =====
 
   cancelProfileForm(): void {
@@ -689,13 +733,14 @@ export class CatalogsPageComponent implements OnInit {
   }
 
   deleteProfile(id: number): void {
-    if (!window.confirm('Delete this profile?')) return;
-    this.api.deleteProfile(id).subscribe({
-      next: () => {
-        this.profiles.update((list) => list.filter((p) => p.id !== id));
-        this.showSuccess((v) => this.profilesSuccess.set(v), 'Profile deleted.');
-      },
-      error: () => this.profilesError.set('Failed to delete profile.'),
+    this.openConfirm('Are you sure you want to delete this profile?', () => {
+      this.api.deleteProfile(id).subscribe({
+        next: () => {
+          this.profiles.update((list) => list.filter((p) => p.id !== id));
+          this.showSuccess((v) => this.profilesSuccess.set(v), 'Profile deleted.');
+        },
+        error: () => this.profilesError.set('Failed to delete profile.'),
+      });
     });
   }
 
@@ -743,13 +788,14 @@ export class CatalogsPageComponent implements OnInit {
   }
 
   deleteMachine(id: number): void {
-    if (!window.confirm('Delete this machine?')) return;
-    this.api.deleteMachine(id).subscribe({
-      next: () => {
-        this.machines.update((list) => list.filter((m) => m.id !== id));
-        this.showSuccess((v) => this.machinesSuccess.set(v), 'Machine deleted.');
-      },
-      error: () => this.machinesError.set('Failed to delete machine.'),
+    this.openConfirm('Are you sure you want to delete this machine?', () => {
+      this.api.deleteMachine(id).subscribe({
+        next: () => {
+          this.machines.update((list) => list.filter((m) => m.id !== id));
+          this.showSuccess((v) => this.machinesSuccess.set(v), 'Machine deleted.');
+        },
+        error: () => this.machinesError.set('Failed to delete machine.'),
+      });
     });
   }
 
@@ -797,13 +843,14 @@ export class CatalogsPageComponent implements OnInit {
   }
 
   deleteShift(id: number): void {
-    if (!window.confirm('Delete this shift?')) return;
-    this.api.deleteShift(id).subscribe({
-      next: () => {
-        this.shifts.update((list) => list.filter((s) => s.id !== id));
-        this.showSuccess((v) => this.shiftsSuccess.set(v), 'Shift deleted.');
-      },
-      error: () => this.shiftsError.set('Failed to delete shift.'),
+    this.openConfirm('Are you sure you want to delete this shift?', () => {
+      this.api.deleteShift(id).subscribe({
+        next: () => {
+          this.shifts.update((list) => list.filter((s) => s.id !== id));
+          this.showSuccess((v) => this.shiftsSuccess.set(v), 'Shift deleted.');
+        },
+        error: () => this.shiftsError.set('Failed to delete shift.'),
+      });
     });
   }
 
@@ -851,13 +898,14 @@ export class CatalogsPageComponent implements OnInit {
   }
 
   deleteContainerType(id: number): void {
-    if (!window.confirm('Delete this container type?')) return;
-    this.api.deleteContainerType(id).subscribe({
-      next: () => {
-        this.containerTypes.update((list) => list.filter((ct) => ct.id !== id));
-        this.showSuccess((v) => this.containerTypesSuccess.set(v), 'Container type deleted.');
-      },
-      error: () => this.containerTypesError.set('Failed to delete container type.'),
+    this.openConfirm('Are you sure you want to delete this container type?', () => {
+      this.api.deleteContainerType(id).subscribe({
+        next: () => {
+          this.containerTypes.update((list) => list.filter((ct) => ct.id !== id));
+          this.showSuccess((v) => this.containerTypesSuccess.set(v), 'Container type deleted.');
+        },
+        error: () => this.containerTypesError.set('Failed to delete container type.'),
+      });
     });
   }
 
@@ -905,13 +953,14 @@ export class CatalogsPageComponent implements OnInit {
   }
 
   deleteContainer(id: number): void {
-    if (!window.confirm('Delete this container?')) return;
-    this.api.deleteContainer(id).subscribe({
-      next: () => {
-        this.containers.update((list) => list.filter((c) => c.id !== id));
-        this.showSuccess((v) => this.containersSuccess.set(v), 'Container deleted.');
-      },
-      error: () => this.containersError.set('Failed to delete container.'),
+    this.openConfirm('Are you sure you want to delete this container?', () => {
+      this.api.deleteContainer(id).subscribe({
+        next: () => {
+          this.containers.update((list) => list.filter((c) => c.id !== id));
+          this.showSuccess((v) => this.containersSuccess.set(v), 'Container deleted.');
+        },
+        error: () => this.containersError.set('Failed to delete container.'),
+      });
     });
   }
 }

@@ -32,12 +32,12 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     label: 'Reports',
-    route: '/coming-soon',
+    route: '/reports',
     roles: ['ADMIN', 'SUPERVISOR', 'CONSULTA'],
   },
   {
     label: 'Catalogs',
-    route: '/coming-soon',
+    route: '/catalogs',
     roles: ['ADMIN'],
   },
 ];

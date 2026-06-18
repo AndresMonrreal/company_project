@@ -2,6 +2,7 @@ package com.example.company.security.config;
 
 import com.example.company.security.adapter.in.web.SecurityErrorWriter;
 import com.example.company.security.filter.JwtAuthenticationFilter;
+import com.example.company.security.filter.RateLimitFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtAuthenticationFilter jwtAuthenticationFilter,
+            RateLimitFilter rateLimitFilter,
             SecurityErrorWriter securityErrorWriter,
             CorsConfigurationSource corsConfigurationSource
     ) throws Exception {
@@ -81,6 +83,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/**").denyAll()
                         .anyRequest().denyAll()
                 )
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

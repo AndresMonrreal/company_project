@@ -51,6 +51,18 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'catalogs',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN'] },
+        loadComponent: () => import('./features/catalogs/pages/catalogs.page').then((m) => m.CatalogsPageComponent),
+      },
+      {
+        path: 'reports',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPERVISOR', 'CONSULTA'] },
+        loadComponent: () => import('./features/reports/pages/reports.page').then((m) => m.ReportsPageComponent),
+      },
+      {
         path: 'coming-soon',
         loadComponent: () => import('./shared/ui/coming-soon.component').then((m) => m.ComingSoonComponent),
       },

@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.example.company.shared.domain.exception.DomainErrorType;
 import com.example.company.shared.domain.exception.DomainException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(DomainException.class)
     ResponseEntity<ApiErrorResponse> domain(DomainException ex, HttpServletRequest request) {
@@ -52,6 +57,12 @@ public class GlobalExceptionHandler {
                         fieldErrors
                 )
         );
+    }
+
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ApiErrorResponse> unexpected(Exception ex, HttpServletRequest request) {
+        log.error("Unexpected error processing request {}: {}", request.getRequestURI(), ex.getMessage(), ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred. Please try again later.", request.getRequestURI(), Map.of());
     }
 
     private HttpStatus toStatus(DomainErrorType type) {

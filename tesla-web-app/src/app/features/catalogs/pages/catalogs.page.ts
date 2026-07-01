@@ -308,8 +308,8 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   @for (item of shifts(); track item.id) {
                     <tr class="hover:bg-gray-50">
                       <td class="px-4 py-3 text-sm text-gray-900">{{ item.name }}</td>
-                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.startTime }}</td>
-                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.endTime }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ formatTime(item.startTime) }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ formatTime(item.endTime) }}</td>
                       <td class="px-4 py-3">
                         <div class="flex gap-2">
                           <button (click)="startEditShift(item)"
@@ -739,7 +739,10 @@ export class CatalogsPageComponent implements OnInit {
           this.profiles.update((list) => list.filter((p) => p.id !== id));
           this.showSuccess((v) => this.profilesSuccess.set(v), 'Profile deleted.');
         },
-        error: () => this.profilesError.set('Failed to delete profile.'),
+        error: (err: HttpErrorResponse) => {
+          const msg = err.error?.message ?? 'Failed to delete profile.';
+          this.profilesError.set(msg);
+        },
       });
     });
   }
@@ -794,7 +797,10 @@ export class CatalogsPageComponent implements OnInit {
           this.machines.update((list) => list.filter((m) => m.id !== id));
           this.showSuccess((v) => this.machinesSuccess.set(v), 'Machine deleted.');
         },
-        error: () => this.machinesError.set('Failed to delete machine.'),
+        error: (err: HttpErrorResponse) => {
+          const msg = err.error?.message ?? 'Failed to delete machine.';
+          this.machinesError.set(msg);
+        },
       });
     });
   }
@@ -810,7 +816,11 @@ export class CatalogsPageComponent implements OnInit {
   startEditShift(item: Shift): void {
     this.showShiftForm.set(false);
     this.editingShiftId.set(item.id);
-    this.shiftForm.setValue({ name: item.name, startTime: item.startTime, endTime: item.endTime });
+    this.shiftForm.setValue({
+      name: item.name,
+      startTime: item.startTime ? item.startTime.substring(0, 5) : '',
+      endTime: item.endTime ? item.endTime.substring(0, 5) : '',
+    });
   }
 
   submitShift(): void {
@@ -849,7 +859,10 @@ export class CatalogsPageComponent implements OnInit {
           this.shifts.update((list) => list.filter((s) => s.id !== id));
           this.showSuccess((v) => this.shiftsSuccess.set(v), 'Shift deleted.');
         },
-        error: () => this.shiftsError.set('Failed to delete shift.'),
+        error: (err: HttpErrorResponse) => {
+          const msg = err.error?.message ?? 'Failed to delete shift.';
+          this.shiftsError.set(msg);
+        },
       });
     });
   }
@@ -904,7 +917,10 @@ export class CatalogsPageComponent implements OnInit {
           this.containerTypes.update((list) => list.filter((ct) => ct.id !== id));
           this.showSuccess((v) => this.containerTypesSuccess.set(v), 'Container type deleted.');
         },
-        error: () => this.containerTypesError.set('Failed to delete container type.'),
+        error: (err: HttpErrorResponse) => {
+          const msg = err.error?.message ?? 'Failed to delete container type.';
+          this.containerTypesError.set(msg);
+        },
       });
     });
   }
@@ -959,8 +975,21 @@ export class CatalogsPageComponent implements OnInit {
           this.containers.update((list) => list.filter((c) => c.id !== id));
           this.showSuccess((v) => this.containersSuccess.set(v), 'Container deleted.');
         },
-        error: () => this.containersError.set('Failed to delete container.'),
+        error: (err: HttpErrorResponse) => {
+          const msg = err.error?.message ?? 'Failed to delete container.';
+          this.containersError.set(msg);
+        },
       });
     });
+  }
+
+  formatTime(time: string | undefined): string {
+    if (!time) return '';
+    const [hourStr, minuteStr] = time.split(':');
+    const hour = parseInt(hourStr, 10);
+    const minute = minuteStr ?? '00';
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+    return `${displayHour}:${minute} ${period}`;
   }
 }

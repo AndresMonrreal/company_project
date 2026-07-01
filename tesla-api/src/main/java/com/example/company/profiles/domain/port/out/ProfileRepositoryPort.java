@@ -13,5 +13,7 @@ public interface ProfileRepositoryPort {
 
     boolean existsByCode(String code);
 
+    boolean hasActiveReceptions(Long profileId);
+
     Profile save(Profile profile);
 }

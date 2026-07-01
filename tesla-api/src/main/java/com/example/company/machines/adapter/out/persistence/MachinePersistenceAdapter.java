@@ -45,6 +45,11 @@ public class MachinePersistenceAdapter implements MachineRepositoryPort {
     }
 
     @Override
+    public boolean hasActiveCuttingRecords(Long machineId) {
+        return machineRepository.hasActiveCuttingRecords(machineId);
+    }
+
+    @Override
     public Machine save(Machine machine) {
         MachineJpaEntity entity = machine.id() == null
                 ? mapper.toNewEntity(machine)

@@ -46,6 +46,11 @@ public class ShiftPersistenceAdapter implements ShiftRepositoryPort {
     }
 
     @Override
+    public boolean hasActiveCuttingRecords(Long shiftId) {
+        return shiftRepository.hasActiveCuttingRecords(shiftId);
+    }
+
+    @Override
     public Optional<Shift> findCurrentByTime(LocalTime now) {
         return shiftRepository.findCurrentByTime(now).stream().findFirst().map(mapper::toDomain);
     }

@@ -18,6 +18,9 @@ public interface SpringDataShiftRepository extends JpaRepository<ShiftJpaEntity,
 
     boolean existsByNameAndIdNot(String name, Long id);
 
+    @Query("SELECT COUNT(c) > 0 FROM CuttingRecordJpaEntity c WHERE c.shiftId = :shiftId")
+    boolean hasActiveCuttingRecords(@Param("shiftId") Long shiftId);
+
     @Query("SELECT s FROM ShiftJpaEntity s WHERE s.active = true AND " +
            "((s.startTime <= :now AND s.endTime > :now) OR " +
            "(s.startTime > s.endTime AND (s.startTime <= :now OR s.endTime > :now)))")

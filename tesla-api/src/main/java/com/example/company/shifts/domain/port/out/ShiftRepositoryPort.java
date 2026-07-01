@@ -18,5 +18,7 @@ public interface ShiftRepositoryPort {
 
     boolean existsByNameAndIdNot(String name, Long id);
 
+    boolean hasActiveCuttingRecords(Long shiftId);
+
     Shift save(Shift shift);
 }

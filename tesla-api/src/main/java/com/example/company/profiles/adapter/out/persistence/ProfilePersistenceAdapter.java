@@ -37,6 +37,11 @@ public class ProfilePersistenceAdapter implements ProfileRepositoryPort {
     }
 
     @Override
+    public boolean hasActiveReceptions(Long profileId) {
+        return profileRepository.hasActiveReceptions(profileId);
+    }
+
+    @Override
     public Profile save(Profile profile) {
         ProfileJpaEntity entity = profile.id() == null
                 ? mapper.toNewEntity(profile)

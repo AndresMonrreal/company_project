@@ -15,5 +15,7 @@ public interface MachineRepositoryPort {
 
     boolean existsByNameAndIdNot(String name, Long id);
 
+    boolean hasActiveCuttingRecords(Long machineId);
+
     Machine save(Machine machine);
 }

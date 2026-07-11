@@ -51,6 +51,15 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'register-scrap',
+        canActivate: [roleGuard],
+        data: { roles: ['ADMIN', 'SUPERVISOR'] },
+        loadComponent: () =>
+          import('./features/register-scrap/pages/register-scrap.page').then(
+            (m) => m.RegisterScrapPage
+          ),
+      },
+      {
         path: 'catalogs',
         canActivate: [roleGuard],
         data: { roles: ['ADMIN'] },

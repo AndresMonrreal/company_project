@@ -9,11 +9,14 @@ import org.springframework.data.repository.query.Param;
 public interface ScrapSpringRepository extends JpaRepository<ScrapRecordJpaEntity, Long> {
 
     @Query(value = """
-            SELECT s.* FROM scrap_records s
-            JOIN cutting_records cr ON s.cutting_record_id = cr.id
-            WHERE cr.operator_id = :operatorId AND cr.shift_id = :shiftId
+            SELECT sr.id, s.name, sr.shift_id, p.code, sr.profile_id,
+                   sr.operator_id, sr.quantity, sr.reason, sr.created_at
+            FROM scrap_records sr
+            JOIN shifts s ON sr.shift_id = s.id
+            JOIN profiles p ON sr.profile_id = p.id
+            WHERE sr.operator_id = :operatorId AND sr.shift_id = :shiftId
             """, nativeQuery = true)
-    List<ScrapRecordJpaEntity> findByOperatorAndShift(
+    List<Object[]> findWithDetailsByOperatorAndShift(
             @Param("operatorId") Long operatorId,
             @Param("shiftId") Long shiftId);
 }

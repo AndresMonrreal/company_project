@@ -29,8 +29,8 @@ class GetMachineServiceTest {
     @Test
     void listsActiveMachines() {
         when(machineRepository.findAllActiveOrderByNameAsc()).thenReturn(List.of(
-                Machine.restore(1L, "CUT-01", true),
-                Machine.restore(2L, "CUT-02", true)
+                Machine.restore(1L, "CUT-01", true, null, "OPERATIONAL", null, null, null, null),
+                Machine.restore(2L, "CUT-02", true, null, "MAINTENANCE", null, null, null, null)
         ));
 
         List<MachineResult> results = service.findAllActive();
@@ -40,7 +40,9 @@ class GetMachineServiceTest {
 
     @Test
     void findsMachineById() {
-        when(machineRepository.findActiveById(1L)).thenReturn(Optional.of(Machine.restore(1L, "CUT-01", true)));
+        when(machineRepository.findActiveById(1L)).thenReturn(Optional.of(
+                Machine.restore(1L, "CUT-01", true, null, "OPERATIONAL", null, null, null, null)
+        ));
 
         MachineResult result = service.findById(1L);
 

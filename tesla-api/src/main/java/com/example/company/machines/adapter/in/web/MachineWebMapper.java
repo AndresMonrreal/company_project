@@ -12,18 +12,28 @@ import org.springframework.stereotype.Component;
 public class MachineWebMapper {
 
     CreateMachineCommand toCommand(MachineCreateRequest request) {
-        return new CreateMachineCommand(request.name());
+        return new CreateMachineCommand(request.name(), request.code(), request.status(),
+                request.processesType(), request.cycleTimeSeconds(),
+                request.lastMaintenanceDate(), request.observations());
     }
 
     UpdateMachineCommand toCommand(MachineUpdateRequest request) {
-        return new UpdateMachineCommand(request.name());
+        return new UpdateMachineCommand(request.name(), request.code(), request.status(),
+                request.processesType(), request.cycleTimeSeconds(),
+                request.lastMaintenanceDate(), request.observations());
     }
 
     MachineResponse toResponse(MachineResult result) {
         return new MachineResponse(
                 result.id(),
                 result.name(),
-                result.active()
+                result.active(),
+                result.code(),
+                result.status(),
+                result.processesType(),
+                result.cycleTimeSeconds(),
+                result.lastMaintenanceDate(),
+                result.observations()
         );
     }
 }

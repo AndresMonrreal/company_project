@@ -29,7 +29,9 @@ class DeleteMachineServiceTest {
 
     @Test
     void softDeletesMachine() {
-        when(machineRepository.findActiveById(1L)).thenReturn(Optional.of(Machine.restore(1L, "CUT-01", true)));
+        when(machineRepository.findActiveById(1L)).thenReturn(Optional.of(
+                Machine.restore(1L, "CUT-01", true, null, "OPERATIONAL", null, null, null, null)
+        ));
         when(machineRepository.save(any(Machine.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         service.delete(1L);

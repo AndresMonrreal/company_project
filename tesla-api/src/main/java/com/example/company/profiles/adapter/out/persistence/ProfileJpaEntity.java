@@ -32,6 +32,12 @@ public class ProfileJpaEntity {
     @Column(nullable = false)
     private boolean active = true;
 
+    @Column(name = "type", length = 10)
+    private String type;
+
+    @Column(name = "profile_position", length = 10)
+    private String position;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -45,11 +51,14 @@ public class ProfileJpaEntity {
     protected ProfileJpaEntity() {
     }
 
-    ProfileJpaEntity(String code, String name, String description, boolean active) {
+    ProfileJpaEntity(String code, String name, String description, boolean active,
+                     String type, String position) {
         this.code = code;
         this.name = name;
         this.description = description;
         this.active = active;
+        this.type = type;
+        this.position = position;
     }
 
     @PrePersist
@@ -64,30 +73,21 @@ public class ProfileJpaEntity {
         updatedAt = LocalDateTime.now();
     }
 
-    void updateFromDomain(String code, String name, String description, boolean active) {
+    void updateFromDomain(String code, String name, String description, boolean active,
+                         String type, String position) {
         this.code = code;
         this.name = name;
         this.description = description;
         this.active = active;
+        this.type = type;
+        this.position = position;
     }
 
-    Long getId() {
-        return id;
-    }
-
-    String getCode() {
-        return code;
-    }
-
-    String getName() {
-        return name;
-    }
-
-    String getDescription() {
-        return description;
-    }
-
-    boolean isActive() {
-        return active;
-    }
+    Long getId() { return id; }
+    String getCode() { return code; }
+    String getName() { return name; }
+    String getDescription() { return description; }
+    boolean isActive() { return active; }
+    String getType() { return type; }
+    String getPosition() { return position; }
 }

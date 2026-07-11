@@ -14,7 +14,9 @@ public final class ProfileResultMapper {
                 profile.code(),
                 profile.name(),
                 profile.description(),
-                profile.active()
+                profile.active(),
+                profile.type(),
+                profile.position()
         );
     }
 }

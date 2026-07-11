@@ -12,7 +12,9 @@ public class ProfilePersistenceMapper {
                 entity.getCode(),
                 entity.getName(),
                 entity.getDescription(),
-                entity.isActive()
+                entity.isActive(),
+                entity.getType(),
+                entity.getPosition()
         );
     }
 
@@ -21,7 +23,9 @@ public class ProfilePersistenceMapper {
                 profile.code(),
                 profile.name(),
                 profile.description(),
-                profile.active()
+                profile.active(),
+                profile.type(),
+                profile.position()
         );
     }
 }

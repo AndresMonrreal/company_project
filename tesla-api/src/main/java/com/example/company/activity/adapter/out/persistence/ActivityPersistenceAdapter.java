@@ -57,14 +57,10 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
     @Override
     @SuppressWarnings("unchecked")
     public List<ActivityRawEntry> findScrapByOperatorAndShift(Long operatorId, Long shiftId) {
-        String sql = "SELECT sr.id, c.code, p.code, sr.quantity, sr.created_at " +
+        String sql = "SELECT sr.id, p.code, sr.quantity, sr.created_at " +
                 "FROM scrap_records sr " +
-                "JOIN cutting_records cr ON sr.cutting_record_id = cr.id " +
-                "JOIN inventory_items ii ON cr.inventory_item_id = ii.id " +
-                "JOIN receptions r ON ii.reception_id = r.id " +
-                "JOIN containers c ON r.container_id = c.id " +
-                "JOIN profiles p ON r.profile_id = p.id " +
-                "WHERE cr.operator_id = :operatorId AND cr.shift_id = :shiftId";
+                "JOIN profiles p ON sr.profile_id = p.id " +
+                "WHERE sr.operator_id = :operatorId AND sr.shift_id = :shiftId";
         var query = em.createNativeQuery(sql);
         query.setParameter("operatorId", operatorId);
         query.setParameter("shiftId", shiftId);
@@ -125,13 +121,14 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
     }
 
     private ActivityRawEntry mapScrapRow(Object[] row) {
+        Object[] cols = (row[0] instanceof Object[]) ? (Object[]) row[0] : row;
         return new ActivityRawEntry(
-                ((Number) row[0]).longValue(),
-                (String) row[1],
-                (String) row[2],
+                ((Number) cols[0]).longValue(),
+                null,
+                (String) cols[1],
                 ActivityAction.SCRAP,
-                toLocalDateTime(row[4]),
-                ((Number) row[3]).intValue(),
+                toLocalDateTime(cols[3]),
+                ((Number) cols[2]).intValue(),
                 null,
                 null,
                 null

@@ -31,6 +31,11 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['ADMIN', 'SUPERVISOR', 'OPERADOR'],
   },
   {
+    label: 'Register Scrap',
+    route: '/register-scrap',
+    roles: ['ADMIN', 'SUPERVISOR'],
+  },
+  {
     label: 'Reports',
     route: '/reports',
     roles: ['ADMIN', 'SUPERVISOR', 'CONSULTA'],

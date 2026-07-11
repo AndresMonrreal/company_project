@@ -1,6 +1,7 @@
 package com.example.company.machines.application.usecase;
 
 import com.example.company.machines.application.mapper.MachineResultMapper;
+import com.example.company.machines.domain.exception.DuplicateMachineCodeException;
 import com.example.company.machines.domain.exception.DuplicateMachineNameException;
 import com.example.company.machines.domain.exception.MachineNotFoundException;
 import com.example.company.machines.domain.model.Machine;
@@ -30,7 +31,12 @@ public class UpdateMachineService implements UpdateMachineUseCase {
             throw new DuplicateMachineNameException(command.name());
         }
 
-        machine.update(command.name());
+        if (command.code() != null && machineRepository.existsByCodeAndIdNot(command.code(), id)) {
+            throw new DuplicateMachineCodeException(command.code());
+        }
+
+        machine.update(command.name(), command.code(), command.status(), command.processesType(),
+                command.cycleTimeSeconds(), command.lastMaintenanceDate(), command.observations());
         return MachineResultMapper.toResult(machineRepository.save(machine));
     }
 }

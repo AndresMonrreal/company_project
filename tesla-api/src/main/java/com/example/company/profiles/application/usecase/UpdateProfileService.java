@@ -25,7 +25,7 @@ public class UpdateProfileService implements UpdateProfileUseCase {
         Profile profile = profileRepository.findActiveById(id)
                 .orElseThrow(() -> new ProfileNotFoundException(id));
 
-        profile.update(command.name(), command.description());
+        profile.update(command.name(), command.description(), command.type(), command.position());
         return ProfileResultMapper.toResult(profileRepository.save(profile));
     }
 }

@@ -12,7 +12,13 @@ public final class MachineResultMapper {
         return new MachineResult(
                 machine.id(),
                 machine.name(),
-                machine.active()
+                machine.active(),
+                machine.code(),
+                machine.status(),
+                machine.processesType(),
+                machine.cycleTimeSeconds(),
+                machine.lastMaintenanceDate(),
+                machine.observations()
         );
     }
 }

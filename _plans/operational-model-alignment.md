@@ -68,7 +68,14 @@ d. Add three CHECK constraints (do NOT apply `ALTER COLUMN ... SET NOT NULL` —
 - `ADD COLUMN processes_type VARCHAR(10)` (nullable — legacy machines stay NULL) with `ADD CONSTRAINT machines_processes_type_check CHECK (processes_type IN ('HEADER', 'LOWER'))`
 - `ADD COLUMN cycle_time_seconds INTEGER`
 - `ADD COLUMN last_maintenance_date DATE`
-- `ADD COLUMN observations VARCHAR(500)`
+- `ADD COLUMN observations VARCHAR(500)
+
+
+
+
+
+
+
 
 **Seed — Tecma and Milan** using `INSERT … ON CONFLICT (name) DO UPDATE`:
 

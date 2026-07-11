@@ -35,9 +35,12 @@ public class ScrapRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ScrapResponse register(@Valid @RequestBody ScrapRequest request) {
+    public ScrapResponse register(@Valid @RequestBody ScrapRequest request,
+                                  @AuthenticationPrincipal AuthenticatedUserPrincipal principal) {
         RegisterScrapCommand command = new RegisterScrapCommand(
-                request.cuttingRecordId(),
+                request.shiftId(),
+                request.profileId(),
+                principal.userId(),
                 request.quantity(),
                 request.reason()
         );
@@ -53,6 +56,7 @@ public class ScrapRestController {
                 .toList();
     }
 
+
     @GetMapping("/{id}")
     public ScrapResponse findById(@PathVariable Long id) {
         return toResponse(getScrap.findById(id));
@@ -61,7 +65,11 @@ public class ScrapRestController {
     private ScrapResponse toResponse(ScrapResult result) {
         return new ScrapResponse(
                 result.id(),
-                result.cuttingRecordId(),
+                result.shiftId(),
+                result.shiftName(),
+                result.profileId(),
+                result.profileCode(),
+                result.operatorId(),
                 result.quantity(),
                 result.reason(),
                 result.createdAt()

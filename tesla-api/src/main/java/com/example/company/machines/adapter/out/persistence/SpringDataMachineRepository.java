@@ -17,6 +17,10 @@ public interface SpringDataMachineRepository extends JpaRepository<MachineJpaEnt
 
     boolean existsByNameAndIdNot(String name, Long id);
 
+    boolean existsByCode(String code);
+
+    boolean existsByCodeAndIdNot(String code, Long id);
+
     @Query("SELECT COUNT(c) > 0 FROM CuttingRecordJpaEntity c WHERE c.machineId = :machineId")
     boolean hasActiveCuttingRecords(@Param("machineId") Long machineId);
 }

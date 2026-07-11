@@ -128,7 +128,8 @@ export class ActivityDetailModalComponent {
         ];
       case 'SCRAP':
         return [
-          { label: 'Cutting Record ID', value: d.cuttingRecordId ?? '—' },
+          { label: 'Shift', value: d.shiftName ?? '—' },
+          { label: 'Profile', value: d.profileCode ?? '—' },
           { label: 'Quantity', value: d.quantity ?? '—' },
           { label: 'Reason', value: d.reason ?? '—' },
           { label: 'Created At', value: d.createdAt ?? '—' },

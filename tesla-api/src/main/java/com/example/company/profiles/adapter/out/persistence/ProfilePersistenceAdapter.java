@@ -32,6 +32,11 @@ public class ProfilePersistenceAdapter implements ProfileRepositoryPort {
     }
 
     @Override
+    public Optional<Profile> findById(Long id) {
+        return profileRepository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
     public boolean existsByCode(String code) {
         return profileRepository.existsByCode(code);
     }
@@ -48,7 +53,8 @@ public class ProfilePersistenceAdapter implements ProfileRepositoryPort {
                 : profileRepository.findById(profile.id())
                         .orElseThrow(() -> new IllegalStateException("Profile entity disappeared during save: " + profile.id()));
 
-        entity.updateFromDomain(profile.code(), profile.name(), profile.description(), profile.active());
+        entity.updateFromDomain(profile.code(), profile.name(), profile.description(), profile.active(),
+                profile.type(), profile.position());
         return mapper.toDomain(profileRepository.save(entity));
     }
 }

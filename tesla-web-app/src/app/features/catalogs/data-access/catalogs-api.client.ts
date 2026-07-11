@@ -13,11 +13,11 @@ export class CatalogsApiClient {
     return this.http.get<Profile[]>(`${this.apiBaseUrl}/api/profiles`);
   }
 
-  createProfile(body: { code: string; name: string; description?: string }): Observable<Profile> {
+  createProfile(body: { code: string; name: string; description?: string; type: string; position: string }): Observable<Profile> {
     return this.http.post<Profile>(`${this.apiBaseUrl}/api/profiles`, body);
   }
 
-  updateProfile(id: number, body: { name: string; description?: string }): Observable<Profile> {
+  updateProfile(id: number, body: { name: string; description?: string; type: string; position: string }): Observable<Profile> {
     return this.http.put<Profile>(`${this.apiBaseUrl}/api/profiles/${id}`, body);
   }
 
@@ -29,11 +29,17 @@ export class CatalogsApiClient {
     return this.http.get<Machine[]>(`${this.apiBaseUrl}/api/machines`);
   }
 
-  createMachine(body: { name: string }): Observable<Machine> {
+  createMachine(body: {
+    name: string; code?: string | null; status: string; processesType: string;
+    cycleTimeSeconds?: number | null; lastMaintenanceDate?: string | null; observations?: string | null;
+  }): Observable<Machine> {
     return this.http.post<Machine>(`${this.apiBaseUrl}/api/machines`, body);
   }
 
-  updateMachine(id: number, body: { name: string }): Observable<Machine> {
+  updateMachine(id: number, body: {
+    name: string; code?: string | null; status: string; processesType?: string | null;
+    cycleTimeSeconds?: number | null; lastMaintenanceDate?: string | null; observations?: string | null;
+  }): Observable<Machine> {
     return this.http.put<Machine>(`${this.apiBaseUrl}/api/machines/${id}`, body);
   }
 

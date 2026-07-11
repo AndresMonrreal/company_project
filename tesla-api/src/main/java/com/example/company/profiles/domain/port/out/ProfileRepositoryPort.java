@@ -11,6 +11,8 @@ public interface ProfileRepositoryPort {
 
     Optional<Profile> findActiveById(Long id);
 
+    Optional<Profile> findById(Long id);
+
     boolean existsByCode(String code);
 
     boolean hasActiveReceptions(Long profileId);

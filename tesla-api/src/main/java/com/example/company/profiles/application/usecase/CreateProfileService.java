@@ -26,7 +26,8 @@ public class CreateProfileService implements CreateProfileUseCase {
             throw new DuplicateProfileCodeException(command.code());
         }
 
-        Profile profile = Profile.create(command.code(), command.name(), command.description());
+        Profile profile = Profile.create(command.code(), command.name(), command.description(),
+                command.type(), command.position());
         return ProfileResultMapper.toResult(profileRepository.save(profile));
     }
 }

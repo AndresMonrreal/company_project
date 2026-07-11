@@ -1,4 +1,14 @@
 package com.example.company.machines.domain.port.in;
 
-public record UpdateMachineCommand(String name) {
+import java.time.LocalDate;
+
+public record UpdateMachineCommand(
+        String name,
+        String code,
+        String status,
+        String processesType,
+        Integer cycleTimeSeconds,
+        LocalDate lastMaintenanceDate,
+        String observations
+) {
 }

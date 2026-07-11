@@ -1,6 +1,7 @@
 package com.example.company.machines.application.usecase;
 
 import com.example.company.machines.application.mapper.MachineResultMapper;
+import com.example.company.machines.domain.exception.DuplicateMachineCodeException;
 import com.example.company.machines.domain.exception.DuplicateMachineNameException;
 import com.example.company.machines.domain.model.Machine;
 import com.example.company.machines.domain.port.in.CreateMachineCommand;
@@ -26,7 +27,13 @@ public class CreateMachineService implements CreateMachineUseCase {
             throw new DuplicateMachineNameException(command.name());
         }
 
-        Machine machine = Machine.create(command.name());
+        if (command.code() != null && machineRepository.existsByCode(command.code())) {
+            throw new DuplicateMachineCodeException(command.code());
+        }
+
+        Machine machine = Machine.create(command.name(), command.code(), command.status(),
+                command.processesType(), command.cycleTimeSeconds(),
+                command.lastMaintenanceDate(), command.observations());
         return MachineResultMapper.toResult(machineRepository.save(machine));
     }
 }

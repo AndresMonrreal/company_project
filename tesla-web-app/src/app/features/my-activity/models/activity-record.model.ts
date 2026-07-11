@@ -4,7 +4,7 @@ export type ActivityStatus = 'RECEIVED' | 'CUT' | 'CLOSED' | 'SENT_TO_MOLDING' |
 export interface ActivityRecord {
   id: number;
   time: string;
-  containerCode: string;
+  containerCode: string | null;
   profileCode: string;
   action: ActivityAction;
   quantities: string;

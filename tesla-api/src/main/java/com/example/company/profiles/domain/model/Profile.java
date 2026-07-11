@@ -7,26 +7,35 @@ public final class Profile {
     private String name;
     private String description;
     private boolean active;
+    private String type;
+    private String position;
 
-    private Profile(Long id, String code, String name, String description, boolean active) {
+    private Profile(Long id, String code, String name, String description, boolean active,
+                    String type, String position) {
         this.id = id;
         this.code = requireText(code, "Profile code is required");
         this.name = requireText(name, "Profile name is required");
         this.description = normalize(description);
         this.active = active;
+        this.type = type;
+        this.position = position;
     }
 
-    public static Profile create(String code, String name, String description) {
-        return new Profile(null, code, name, description, true);
+    public static Profile create(String code, String name, String description,
+                                 String type, String position) {
+        return new Profile(null, code, name, description, true, type, position);
     }
 
-    public static Profile restore(Long id, String code, String name, String description, boolean active) {
-        return new Profile(id, code, name, description, active);
+    public static Profile restore(Long id, String code, String name, String description,
+                                  boolean active, String type, String position) {
+        return new Profile(id, code, name, description, active, type, position);
     }
 
-    public void update(String name, String description) {
+    public void update(String name, String description, String type, String position) {
         this.name = requireText(name, "Profile name is required");
         this.description = normalize(description);
+        this.type = type;
+        this.position = position;
     }
 
     public void deactivate() {
@@ -51,6 +60,14 @@ public final class Profile {
 
     public boolean active() {
         return active;
+    }
+
+    public String type() {
+        return type;
+    }
+
+    public String position() {
+        return position;
     }
 
     private static String requireText(String value, String message) {

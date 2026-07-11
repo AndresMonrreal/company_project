@@ -80,6 +80,24 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                     <input type="text" formControlName="description" maxlength="255"
                       class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Type *</label>
+                    <select formControlName="type"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                      <option value="">Select type…</option>
+                      <option value="HEADER">HEADER</option>
+                      <option value="LOWER">LOWER</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Position *</label>
+                    <select formControlName="position"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                      <option value="">Select position…</option>
+                      <option value="FRONT">FRONT</option>
+                      <option value="REAR">REAR</option>
+                    </select>
+                  </div>
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="profileSubmitting() || profileCreateForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
@@ -108,6 +126,24 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                     <input type="text" formControlName="description" maxlength="255"
                       class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Type *</label>
+                    <select formControlName="type"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                      <option value="">Select type…</option>
+                      <option value="HEADER">HEADER</option>
+                      <option value="LOWER">LOWER</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Position *</label>
+                    <select formControlName="position"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                      <option value="">Select position…</option>
+                      <option value="FRONT">FRONT</option>
+                      <option value="REAR">REAR</option>
+                    </select>
+                  </div>
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="profileSubmitting() || profileEditForm.invalid"
                       class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
@@ -129,6 +165,8 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Code</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Name</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Description</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Position</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
                   </tr>
                 </thead>
@@ -138,6 +176,8 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                       <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ item.code }}</td>
                       <td class="px-4 py-3 text-sm text-gray-900">{{ item.name }}</td>
                       <td class="px-4 py-3 text-sm text-gray-500">{{ item.description }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.type ?? '—' }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.position ?? '—' }}</td>
                       <td class="px-4 py-3">
                         <div class="flex gap-2">
                           <button (click)="startEditProfile(item)"
@@ -149,7 +189,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                     </tr>
                   }
                   @if (profiles().length === 0) {
-                    <tr><td colspan="4" class="px-4 py-8 text-center text-sm text-gray-400">No profiles found.</td></tr>
+                    <tr><td colspan="6" class="px-4 py-8 text-center text-sm text-gray-400">No profiles found.</td></tr>
                   }
                 </tbody>
               </table>
@@ -175,7 +215,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
           } @else {
             @if (!showMachineForm() && editingMachineId() === null) {
               <div>
-                <button (click)="showMachineForm.set(true)"
+                <button (click)="openMachineCreate()"
                   class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
                   + Add Machine
                 </button>
@@ -190,6 +230,45 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                     <label class="block text-xs font-medium text-gray-600 mb-1">Name *</label>
                     <input type="text" formControlName="name" maxlength="80"
                       class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Code</label>
+                    <input type="text" formControlName="code" maxlength="20"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Status *</label>
+                    <select formControlName="status"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                      <option value="">Select status…</option>
+                      <option value="OPERATIONAL">OPERATIONAL</option>
+                      <option value="MAINTENANCE">MAINTENANCE</option>
+                      <option value="OUT_OF_SERVICE">OUT_OF_SERVICE</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Processes Type{{ editingMachineId() === null ? ' *' : '' }}</label>
+                    <select formControlName="processesType"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                      <option [ngValue]="null">Select type…</option>
+                      <option value="HEADER">HEADER</option>
+                      <option value="LOWER">LOWER</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Cycle Time (seconds)</label>
+                    <input type="number" formControlName="cycleTimeSeconds" min="0"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Last Maintenance Date</label>
+                    <input type="date" formControlName="lastMaintenanceDate"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Observations</label>
+                    <textarea formControlName="observations" rows="2" maxlength="500"
+                      class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
                   </div>
                   <div class="sm:col-span-2 flex gap-2">
                     <button type="submit" [disabled]="machineSubmitting() || machineForm.invalid"
@@ -210,6 +289,9 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                 <thead class="bg-gray-50">
                   <tr>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Name</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Code</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Status</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Processes Type</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
                   </tr>
                 </thead>
@@ -217,6 +299,9 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   @for (item of machines(); track item.id) {
                     <tr class="hover:bg-gray-50">
                       <td class="px-4 py-3 text-sm text-gray-900">{{ item.name }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.code ?? '—' }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.status ?? '—' }}</td>
+                      <td class="px-4 py-3 text-sm text-gray-600">{{ item.processesType ?? '—' }}</td>
                       <td class="px-4 py-3">
                         <div class="flex gap-2">
                           <button (click)="startEditMachine(item)"
@@ -228,7 +313,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                     </tr>
                   }
                   @if (machines().length === 0) {
-                    <tr><td colspan="2" class="px-4 py-8 text-center text-sm text-gray-400">No machines found.</td></tr>
+                    <tr><td colspan="5" class="px-4 py-8 text-center text-sm text-gray-400">No machines found.</td></tr>
                   }
                 </tbody>
               </table>
@@ -592,15 +677,25 @@ export class CatalogsPageComponent implements OnInit {
     code: ['', [Validators.required, Validators.maxLength(10)]],
     name: ['', [Validators.required, Validators.maxLength(100)]],
     description: ['', Validators.maxLength(255)],
+    type: ['', Validators.required],
+    position: ['', Validators.required],
   });
 
   readonly profileEditForm = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
     description: ['', Validators.maxLength(255)],
+    type: ['', Validators.required],
+    position: ['', Validators.required],
   });
 
   readonly machineForm = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(80)]],
+    code: [null as string | null, Validators.maxLength(20)],
+    status: ['', Validators.required],
+    processesType: [null as string | null],
+    cycleTimeSeconds: [null as number | null],
+    lastMaintenanceDate: [null as string | null],
+    observations: [null as string | null, Validators.maxLength(500)],
   });
 
   readonly shiftForm = this.fb.group({
@@ -689,15 +784,20 @@ export class CatalogsPageComponent implements OnInit {
   startEditProfile(item: Profile): void {
     this.showProfileForm.set(false);
     this.editingProfileId.set(item.id);
-    this.profileEditForm.setValue({ name: item.name, description: item.description ?? '' });
+    this.profileEditForm.setValue({
+      name: item.name,
+      description: item.description ?? '',
+      type: item.type ?? '',
+      position: item.position ?? '',
+    });
   }
 
   submitProfileCreate(): void {
     if (this.profileCreateForm.invalid || this.profileSubmitting()) return;
     this.profileSubmitting.set(true);
     this.profilesError.set(null);
-    const { code, name, description } = this.profileCreateForm.getRawValue();
-    this.api.createProfile({ code: code!, name: name!, description: description ?? undefined }).subscribe({
+    const { code, name, description, type, position } = this.profileCreateForm.getRawValue();
+    this.api.createProfile({ code: code!, name: name!, description: description ?? undefined, type: type!, position: position! }).subscribe({
       next: (created) => {
         this.profiles.update((list) => [...list, created]);
         this.profileSubmitting.set(false);
@@ -716,8 +816,8 @@ export class CatalogsPageComponent implements OnInit {
     if (this.profileEditForm.invalid || this.profileSubmitting() || this.editingProfileId() === null) return;
     this.profileSubmitting.set(true);
     this.profilesError.set(null);
-    const { name, description } = this.profileEditForm.getRawValue();
-    this.api.updateProfile(this.editingProfileId()!, { name: name!, description: description ?? undefined }).subscribe({
+    const { name, description, type, position } = this.profileEditForm.getRawValue();
+    this.api.updateProfile(this.editingProfileId()!, { name: name!, description: description ?? undefined, type: type!, position: position! }).subscribe({
       next: (updated) => {
         this.profiles.update((list) => list.map((p) => (p.id === updated.id ? updated : p)));
         this.profileSubmitting.set(false);
@@ -749,27 +849,57 @@ export class CatalogsPageComponent implements OnInit {
 
   // ===== MACHINES =====
 
+  openMachineCreate(): void {
+    this.machineForm.reset();
+    const ptCtrl = this.machineForm.get('processesType')!;
+    ptCtrl.setValidators([Validators.required]);
+    ptCtrl.updateValueAndValidity();
+    this.showMachineForm.set(true);
+  }
+
   cancelMachineForm(): void {
     this.showMachineForm.set(false);
     this.editingMachineId.set(null);
     this.machineForm.reset();
+    const ptCtrl = this.machineForm.get('processesType')!;
+    ptCtrl.clearValidators();
+    ptCtrl.updateValueAndValidity();
   }
 
   startEditMachine(item: Machine): void {
     this.showMachineForm.set(false);
     this.editingMachineId.set(item.id);
-    this.machineForm.setValue({ name: item.name });
+    const ptCtrl = this.machineForm.get('processesType')!;
+    ptCtrl.clearValidators();
+    ptCtrl.updateValueAndValidity();
+    this.machineForm.setValue({
+      name: item.name,
+      code: item.code ?? null,
+      status: item.status ?? '',
+      processesType: item.processesType ?? null,
+      cycleTimeSeconds: item.cycleTimeSeconds ?? null,
+      lastMaintenanceDate: item.lastMaintenanceDate ?? null,
+      observations: item.observations ?? null,
+    });
   }
 
   submitMachine(): void {
     if (this.machineForm.invalid || this.machineSubmitting()) return;
     this.machineSubmitting.set(true);
     this.machinesError.set(null);
-    const { name } = this.machineForm.getRawValue();
-    const req = this.editingMachineId() !== null
-      ? this.api.updateMachine(this.editingMachineId()!, { name: name! })
-      : this.api.createMachine({ name: name! });
+    const { name, code, status, processesType, cycleTimeSeconds, lastMaintenanceDate, observations } = this.machineForm.getRawValue();
     const isEdit = this.editingMachineId() !== null;
+    const req = isEdit
+      ? this.api.updateMachine(this.editingMachineId()!, {
+          name: name!, code: code ?? null, status: status!, processesType: processesType ?? null,
+          cycleTimeSeconds: cycleTimeSeconds ?? null, lastMaintenanceDate: lastMaintenanceDate ?? null,
+          observations: observations ?? null,
+        })
+      : this.api.createMachine({
+          name: name!, code: code ?? null, status: status!, processesType: processesType!,
+          cycleTimeSeconds: cycleTimeSeconds ?? null, lastMaintenanceDate: lastMaintenanceDate ?? null,
+          observations: observations ?? null,
+        });
     req.subscribe({
       next: (saved) => {
         if (isEdit) {

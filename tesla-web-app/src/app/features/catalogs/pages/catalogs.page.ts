@@ -87,6 +87,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                       <option value="">Select type…</option>
                       <option value="HEADER">HEADER</option>
                       <option value="LOWER">LOWER</option>
+                      <option value="BOTH">BOTH</option>
                     </select>
                   </div>
                   <div>
@@ -133,6 +134,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                       <option value="">Select type…</option>
                       <option value="HEADER">HEADER</option>
                       <option value="LOWER">LOWER</option>
+                      <option value="BOTH">BOTH</option>
                     </select>
                   </div>
                   <div>
@@ -262,7 +264,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   </div>
                   <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Last Maintenance Date</label>
-                    <input type="date" formControlName="lastMaintenanceDate"
+                    <input type="month" formControlName="lastMaintenanceDate"
                       class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div class="sm:col-span-2">
@@ -878,7 +880,9 @@ export class CatalogsPageComponent implements OnInit {
       status: item.status ?? '',
       processesType: item.processesType ?? null,
       cycleTimeSeconds: item.cycleTimeSeconds ?? null,
-      lastMaintenanceDate: item.lastMaintenanceDate ?? null,
+      lastMaintenanceDate: item.lastMaintenanceDate
+        ? item.lastMaintenanceDate.substring(0, 7)
+        : null,
       observations: item.observations ?? null,
     });
   }
@@ -888,16 +892,19 @@ export class CatalogsPageComponent implements OnInit {
     this.machineSubmitting.set(true);
     this.machinesError.set(null);
     const { name, code, status, processesType, cycleTimeSeconds, lastMaintenanceDate, observations } = this.machineForm.getRawValue();
+    const normalizedMaintenance = lastMaintenanceDate
+      ? (lastMaintenanceDate.length === 7 ? lastMaintenanceDate + '-01' : lastMaintenanceDate)
+      : null;
     const isEdit = this.editingMachineId() !== null;
     const req = isEdit
       ? this.api.updateMachine(this.editingMachineId()!, {
           name: name!, code: code ?? null, status: status!, processesType: processesType ?? null,
-          cycleTimeSeconds: cycleTimeSeconds ?? null, lastMaintenanceDate: lastMaintenanceDate ?? null,
+          cycleTimeSeconds: cycleTimeSeconds ?? null, lastMaintenanceDate: normalizedMaintenance,
           observations: observations ?? null,
         })
       : this.api.createMachine({
           name: name!, code: code ?? null, status: status!, processesType: processesType!,
-          cycleTimeSeconds: cycleTimeSeconds ?? null, lastMaintenanceDate: lastMaintenanceDate ?? null,
+          cycleTimeSeconds: cycleTimeSeconds ?? null, lastMaintenanceDate: normalizedMaintenance,
           observations: observations ?? null,
         });
     req.subscribe({

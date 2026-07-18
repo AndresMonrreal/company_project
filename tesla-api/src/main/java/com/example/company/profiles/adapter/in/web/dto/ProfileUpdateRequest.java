@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record ProfileUpdateRequest(
         @NotBlank @Size(max = 100) String name,
         @Size(max = 255) String description,
-        @NotBlank @Pattern(regexp = "HEADER|LOWER") String type,
+        @NotBlank @Pattern(regexp = "HEADER|LOWER|BOTH") String type,
         @NotBlank @Pattern(regexp = "FRONT|REAR") String position
 ) {
 }

@@ -1,4 +1,4 @@
-export type ProfileType = 'HEADER' | 'LOWER';
+export type ProfileType = 'HEADER' | 'LOWER' | 'BOTH';
 export type ProfilePosition = 'FRONT' | 'REAR';
 export type MachineStatus = 'OPERATIONAL' | 'MAINTENANCE' | 'OUT_OF_SERVICE';
 export type ProcessesType = 'HEADER' | 'LOWER';

@@ -1,0 +1,14 @@
+CREATE INDEX IF NOT EXISTS idx_receptions_operator_id ON receptions(operator_id);
+CREATE INDEX IF NOT EXISTS idx_receptions_received_at ON receptions(received_at);
+CREATE INDEX IF NOT EXISTS idx_receptions_container_id ON receptions(container_id);
+CREATE INDEX IF NOT EXISTS idx_inventory_items_status ON inventory_items(status);
+CREATE INDEX IF NOT EXISTS idx_inventory_items_reception_id ON inventory_items(reception_id);
+CREATE INDEX IF NOT EXISTS idx_cutting_records_operator_id ON cutting_records(operator_id);
+CREATE INDEX IF NOT EXISTS idx_cutting_records_shift_id ON cutting_records(shift_id);
+CREATE INDEX IF NOT EXISTS idx_cutting_records_cut_at ON cutting_records(cut_at);
+CREATE INDEX IF NOT EXISTS idx_cutting_records_inventory_item_id ON cutting_records(inventory_item_id);
+CREATE INDEX IF NOT EXISTS idx_scrap_records_cutting_record_id ON scrap_records(cutting_record_id);
+CREATE INDEX IF NOT EXISTS idx_scrap_records_created_at ON scrap_records(created_at);
+CREATE INDEX IF NOT EXISTS idx_molding_outputs_operator_id ON molding_outputs(operator_id);
+CREATE INDEX IF NOT EXISTS idx_molding_outputs_cutting_record_id ON molding_outputs(cutting_record_id);
+CREATE INDEX IF NOT EXISTS idx_molding_outputs_sent_at ON molding_outputs(sent_at);

@@ -42,6 +42,11 @@ public class ContainerPersistenceAdapter implements ContainerRepositoryPort {
     }
 
     @Override
+    public boolean hasActiveReceptions(Long containerId) {
+        return containerRepository.hasActiveReceptions(containerId);
+    }
+
+    @Override
     public Container save(Container container) {
         ContainerJpaEntity entity = container.id() == null
                 ? mapper.toNewEntity(container)

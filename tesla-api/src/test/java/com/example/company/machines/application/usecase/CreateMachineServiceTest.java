@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.company.machines.domain.exception.DuplicateMachineCodeException;
 import com.example.company.machines.domain.exception.DuplicateMachineNameException;
 import com.example.company.machines.domain.model.Machine;
 import com.example.company.machines.domain.port.in.CreateMachineCommand;
@@ -29,13 +30,19 @@ class CreateMachineServiceTest {
     @Test
     void createsMachineWhenNameIsUnique() {
         when(machineRepository.existsByName("CUT-01")).thenReturn(false);
-        when(machineRepository.save(any(Machine.class))).thenReturn(Machine.restore(1L, "CUT-01", true));
+        when(machineRepository.save(any(Machine.class))).thenReturn(
+                Machine.restore(1L, "CUT-01", true, null, "OPERATIONAL", "HEADER", null, null, null)
+        );
 
-        MachineResult result = service.create(new CreateMachineCommand("CUT-01"));
+        MachineResult result = service.create(new CreateMachineCommand(
+                "CUT-01", null, "OPERATIONAL", "HEADER", null, null, null
+        ));
 
         assertThat(result.id()).isEqualTo(1L);
         assertThat(result.name()).isEqualTo("CUT-01");
         assertThat(result.active()).isTrue();
+        assertThat(result.status()).isEqualTo("OPERATIONAL");
+        assertThat(result.processesType()).isEqualTo("HEADER");
         verify(machineRepository).save(any(Machine.class));
     }
 
@@ -43,8 +50,22 @@ class CreateMachineServiceTest {
     void rejectsDuplicateName() {
         when(machineRepository.existsByName("CUT-01")).thenReturn(true);
 
-        assertThatThrownBy(() -> service.create(new CreateMachineCommand("CUT-01")))
+        assertThatThrownBy(() -> service.create(new CreateMachineCommand(
+                "CUT-01", null, "OPERATIONAL", "HEADER", null, null, null
+        )))
                 .isInstanceOf(DuplicateMachineNameException.class)
                 .hasMessage("Machine name already exists: CUT-01");
+    }
+
+    @Test
+    void rejectsDuplicateCode() {
+        when(machineRepository.existsByName("CUT-01")).thenReturn(false);
+        when(machineRepository.existsByCode("M001")).thenReturn(true);
+
+        assertThatThrownBy(() -> service.create(new CreateMachineCommand(
+                "CUT-01", "M001", "OPERATIONAL", "HEADER", null, null, null
+        )))
+                .isInstanceOf(DuplicateMachineCodeException.class)
+                .hasMessage("Machine code already exists: M001");
     }
 }

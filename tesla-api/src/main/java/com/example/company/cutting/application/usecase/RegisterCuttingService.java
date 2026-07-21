@@ -56,7 +56,10 @@ public class RegisterCuttingService implements RegisterCuttingUseCase {
                 record.quantities().initialQuantity(),
                 record.quantities().goodQuantity(),
                 record.quantities().scrapQuantity(),
-                record.cutAt()
+                record.cutAt(),
+                null,
+                null,
+                null
         );
     }
 }

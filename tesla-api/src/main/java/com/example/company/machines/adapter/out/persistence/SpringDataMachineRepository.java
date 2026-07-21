@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface SpringDataMachineRepository extends JpaRepository<MachineJpaEntity, Long> {
 
@@ -14,4 +16,11 @@ public interface SpringDataMachineRepository extends JpaRepository<MachineJpaEnt
     boolean existsByName(String name);
 
     boolean existsByNameAndIdNot(String name, Long id);
+
+    boolean existsByCode(String code);
+
+    boolean existsByCodeAndIdNot(String code, Long id);
+
+    @Query("SELECT COUNT(c) > 0 FROM CuttingRecordJpaEntity c WHERE c.machineId = :machineId")
+    boolean hasActiveCuttingRecords(@Param("machineId") Long machineId);
 }

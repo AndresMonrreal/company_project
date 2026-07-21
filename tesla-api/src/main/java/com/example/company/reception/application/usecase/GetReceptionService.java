@@ -34,6 +34,12 @@ public class GetReceptionService implements GetReceptionUseCase {
     }
 
     @Override
+    public ReceptionResult findByIdWithCodes(Long id) {
+        return receptionRepository.findByIdWithCodes(id)
+                .orElseThrow(() -> new ReceptionNotFoundException(id));
+    }
+
+    @Override
     public List<ReceptionResult> findByOperatorAndShift(Long operatorId, Long shiftId) {
         Shift shift = shiftRepository.findActiveById(shiftId)
                 .orElseThrow(() -> new ShiftNotFoundException(shiftId));
@@ -48,8 +54,8 @@ public class GetReceptionService implements GetReceptionUseCase {
     private ReceptionResult toResult(Reception reception) {
         return new ReceptionResult(
                 reception.id(),
-                reception.containerId(),
-                reception.profileId(),
+                null,
+                null,
                 reception.operatorId(),
                 reception.lot(),
                 reception.receivedQuantity(),

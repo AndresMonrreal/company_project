@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 
 public record ScrapResponse(
         Long id,
-        Long cuttingRecordId,
+        Long shiftId,
+        String shiftName,
+        Long profileId,
+        String profileCode,
+        Long operatorId,
         int quantity,
         String reason,
         LocalDateTime createdAt

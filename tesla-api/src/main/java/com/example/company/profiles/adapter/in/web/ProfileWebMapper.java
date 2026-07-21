@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ProfileWebMapper {
 
     CreateProfileCommand toCommand(ProfileCreateRequest request) {
-        return new CreateProfileCommand(request.code(), request.name(), request.description());
+        return new CreateProfileCommand(request.code(), request.name(), request.description(),
+                request.type(), request.position());
     }
 
     UpdateProfileCommand toCommand(ProfileUpdateRequest request) {
-        return new UpdateProfileCommand(request.name(), request.description());
+        return new UpdateProfileCommand(request.name(), request.description(),
+                request.type(), request.position());
     }
 
     ProfileResponse toResponse(ProfileResult result) {
@@ -25,7 +27,9 @@ public class ProfileWebMapper {
                 result.code(),
                 result.name(),
                 result.description(),
-                result.active()
+                result.active(),
+                result.type(),
+                result.position()
         );
     }
 }

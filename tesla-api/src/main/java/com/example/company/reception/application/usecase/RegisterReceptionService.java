@@ -39,8 +39,8 @@ public class RegisterReceptionService implements RegisterReceptionUseCase {
     private ReceptionResult toResult(Reception reception) {
         return new ReceptionResult(
                 reception.id(),
-                reception.containerId(),
-                reception.profileId(),
+                "",
+                "",
                 reception.operatorId(),
                 reception.lot(),
                 reception.receivedQuantity(),

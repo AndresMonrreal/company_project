@@ -18,8 +18,14 @@ public class ScrapRecordJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cutting_record_id", nullable = false)
-    private Long cuttingRecordId;
+    @Column(name = "shift_id", nullable = false)
+    private Long shiftId;
+
+    @Column(name = "profile_id", nullable = false)
+    private Long profileId;
+
+    @Column(name = "operator_id", nullable = false)
+    private Long operatorId;
 
     @Column(nullable = false)
     private int quantity;
@@ -33,8 +39,10 @@ public class ScrapRecordJpaEntity {
     protected ScrapRecordJpaEntity() {
     }
 
-    ScrapRecordJpaEntity(Long cuttingRecordId, int quantity, String reason) {
-        this.cuttingRecordId = cuttingRecordId;
+    ScrapRecordJpaEntity(Long shiftId, Long profileId, Long operatorId, int quantity, String reason) {
+        this.shiftId = shiftId;
+        this.profileId = profileId;
+        this.operatorId = operatorId;
         this.quantity = quantity;
         this.reason = reason;
     }
@@ -45,7 +53,9 @@ public class ScrapRecordJpaEntity {
     }
 
     Long getId() { return id; }
-    Long getCuttingRecordId() { return cuttingRecordId; }
+    Long getShiftId() { return shiftId; }
+    Long getProfileId() { return profileId; }
+    Long getOperatorId() { return operatorId; }
     int getQuantity() { return quantity; }
     String getReason() { return reason; }
     LocalDateTime getCreatedAt() { return createdAt; }

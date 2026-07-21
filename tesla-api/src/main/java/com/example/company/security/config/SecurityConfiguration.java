@@ -2,6 +2,7 @@ package com.example.company.security.config;
 
 import com.example.company.security.adapter.in.web.SecurityErrorWriter;
 import com.example.company.security.filter.JwtAuthenticationFilter;
+import com.example.company.security.filter.RateLimitFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtAuthenticationFilter jwtAuthenticationFilter,
+            RateLimitFilter rateLimitFilter,
             SecurityErrorWriter securityErrorWriter,
             CorsConfigurationSource corsConfigurationSource
     ) throws Exception {
@@ -63,17 +65,17 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, CATALOG_COLLECTIONS).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, CATALOG_ITEMS).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, CATALOG_ITEMS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/receptions").hasAnyRole("ADMIN", "OPERADOR", "SUPERVISOR")
+                        .requestMatchers(HttpMethod.POST, "/api/receptions").hasAnyRole("ADMIN", "SUPERVISOR")
                         .requestMatchers(HttpMethod.GET, "/api/receptions/my").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/receptions/*").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/cutting").hasAnyRole("ADMIN", "OPERADOR", "SUPERVISOR")
+                        .requestMatchers(HttpMethod.POST, "/api/cutting").hasAnyRole("ADMIN", "SUPERVISOR")
                         .requestMatchers(HttpMethod.GET, "/api/cutting/my").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/cutting/*").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/cutting/available").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/scrap").hasAnyRole("ADMIN", "OPERADOR", "SUPERVISOR")
+                        .requestMatchers(HttpMethod.POST, "/api/scrap").hasAnyRole("ADMIN", "SUPERVISOR")
                         .requestMatchers(HttpMethod.GET, "/api/scrap/my").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/scrap/*").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/molding-outputs").hasAnyRole("ADMIN", "OPERADOR", "SUPERVISOR")
+                        .requestMatchers(HttpMethod.POST, "/api/molding-outputs").hasAnyRole("ADMIN", "SUPERVISOR")
                         .requestMatchers(HttpMethod.GET, "/api/molding-outputs/my").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/molding-outputs/*").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/activity/my").authenticated()
@@ -81,6 +83,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/**").denyAll()
                         .anyRequest().denyAll()
                 )
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -15,5 +15,7 @@ public interface ContainerRepositoryPort {
 
     boolean existsByCodeAndIdNot(String code, Long id);
 
+    boolean hasActiveReceptions(Long containerId);
+
     Container save(Container container);
 }

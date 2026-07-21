@@ -5,6 +5,8 @@ public record ProfileResult(
         String code,
         String name,
         String description,
-        boolean active
+        boolean active,
+        String type,
+        String position
 ) {
 }

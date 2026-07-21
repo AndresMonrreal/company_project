@@ -5,7 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ScrapRequest(
-        @NotNull Long cuttingRecordId,
+        @NotNull Long shiftId,
+        @NotNull Long profileId,
         @Min(1) int quantity,
         @Size(max = 255) String reason
 ) {

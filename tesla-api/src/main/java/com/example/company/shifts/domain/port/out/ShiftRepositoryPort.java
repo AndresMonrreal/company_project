@@ -12,11 +12,15 @@ public interface ShiftRepositoryPort {
 
     Optional<Shift> findActiveById(Long id);
 
+    Optional<Shift> findById(Long id);
+
     Optional<Shift> findCurrentByTime(LocalTime now);
 
     boolean existsByName(String name);
 
     boolean existsByNameAndIdNot(String name, Long id);
+
+    boolean hasActiveCuttingRecords(Long shiftId);
 
     Shift save(Shift shift);
 }

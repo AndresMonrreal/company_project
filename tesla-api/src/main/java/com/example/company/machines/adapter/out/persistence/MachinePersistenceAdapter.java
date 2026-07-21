@@ -45,6 +45,21 @@ public class MachinePersistenceAdapter implements MachineRepositoryPort {
     }
 
     @Override
+    public boolean hasActiveCuttingRecords(Long machineId) {
+        return machineRepository.hasActiveCuttingRecords(machineId);
+    }
+
+    @Override
+    public boolean existsByCode(String code) {
+        return machineRepository.existsByCode(code);
+    }
+
+    @Override
+    public boolean existsByCodeAndIdNot(String code, Long id) {
+        return machineRepository.existsByCodeAndIdNot(code, id);
+    }
+
+    @Override
     public Machine save(Machine machine) {
         MachineJpaEntity entity = machine.id() == null
                 ? mapper.toNewEntity(machine)
@@ -53,7 +68,9 @@ public class MachinePersistenceAdapter implements MachineRepositoryPort {
                                 "Machine entity disappeared during save: " + machine.id()
                         ));
 
-        entity.updateFromDomain(machine.name(), machine.active());
+        entity.updateFromDomain(machine.name(), machine.active(), machine.code(), machine.status(),
+                machine.processesType(), machine.cycleTimeSeconds(),
+                machine.lastMaintenanceDate(), machine.observations());
         return mapper.toDomain(machineRepository.save(entity));
     }
 }

@@ -10,6 +10,7 @@ public record ActivityRawEntry(
         LocalDateTime recordedAt,
         int primaryQuantity,
         Integer secondaryQuantity,
-        Integer tertiaryQuantity
+        Integer tertiaryQuantity,
+        String status
 ) {
 }

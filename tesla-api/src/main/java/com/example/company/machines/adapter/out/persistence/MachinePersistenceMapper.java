@@ -10,14 +10,26 @@ public class MachinePersistenceMapper {
         return Machine.restore(
                 entity.getId(),
                 entity.getName(),
-                entity.isActive()
+                entity.isActive(),
+                entity.getCode(),
+                entity.getStatus(),
+                entity.getProcessesType(),
+                entity.getCycleTimeSeconds(),
+                entity.getLastMaintenanceDate(),
+                entity.getObservations()
         );
     }
 
     MachineJpaEntity toNewEntity(Machine machine) {
         return new MachineJpaEntity(
                 machine.name(),
-                machine.active()
+                machine.active(),
+                machine.code(),
+                machine.status(),
+                machine.processesType(),
+                machine.cycleTimeSeconds(),
+                machine.lastMaintenanceDate(),
+                machine.observations()
         );
     }
 }

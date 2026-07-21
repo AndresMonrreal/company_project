@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.company.scrap.domain.model.ScrapRecord;
+import com.example.company.scrap.domain.port.in.ScrapResult;
 
 public interface ScrapRepositoryPort {
 
@@ -11,5 +12,5 @@ public interface ScrapRepositoryPort {
 
     Optional<ScrapRecord> findById(Long id);
 
-    List<ScrapRecord> findByOperatorAndShift(Long operatorId, Long shiftId);
+    List<ScrapResult> findByOperatorAndShift(Long operatorId, Long shiftId);
 }

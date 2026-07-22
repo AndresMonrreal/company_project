@@ -1,7 +1,7 @@
-export type ProfileType = 'HEADER' | 'LOWER' | 'BOTH';
+export type ProfileType = 'HEADER' | 'LOWER';
 export type ProfilePosition = 'FRONT' | 'REAR';
 export type MachineStatus = 'OPERATIONAL' | 'MAINTENANCE' | 'OUT_OF_SERVICE';
-export type ProcessesType = 'HEADER' | 'LOWER';
+export type ProcessesType = 'HEADER' | 'LOWER' | 'BOTH';
 
 export interface Profile {
   id: number;

@@ -67,7 +67,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                 <form [formGroup]="profileCreateForm" (ngSubmit)="submitProfileCreate()" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Code *</label>
-                    <input type="text" formControlName="code" maxlength="10"
+                    <input type="text" formControlName="code" maxlength="20"
                       class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
@@ -87,7 +87,6 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                       <option value="">Select type…</option>
                       <option value="HEADER">HEADER</option>
                       <option value="LOWER">LOWER</option>
-                      <option value="BOTH">BOTH</option>
                     </select>
                   </div>
                   <div>
@@ -134,7 +133,6 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                       <option value="">Select type…</option>
                       <option value="HEADER">HEADER</option>
                       <option value="LOWER">LOWER</option>
-                      <option value="BOTH">BOTH</option>
                     </select>
                   </div>
                   <div>
@@ -255,6 +253,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                       <option [ngValue]="null">Select type…</option>
                       <option value="HEADER">HEADER</option>
                       <option value="LOWER">LOWER</option>
+                      <option value="BOTH">BOTH</option>
                     </select>
                   </div>
                   <div>
@@ -676,7 +675,7 @@ export class CatalogsPageComponent implements OnInit {
 
   // Forms
   readonly profileCreateForm = this.fb.group({
-    code: ['', [Validators.required, Validators.maxLength(10)]],
+    code: ['', [Validators.required, Validators.maxLength(20)]],
     name: ['', [Validators.required, Validators.maxLength(100)]],
     description: ['', Validators.maxLength(255)],
     type: ['', Validators.required],

@@ -33,7 +33,8 @@ public class ActivityRestController {
                         result.profileCode(),
                         result.action().name(),
                         result.quantities(),
-                        result.status()
+                        result.status(),
+                        result.lot()
                 ))
                 .toList();
     }

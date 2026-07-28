@@ -6,5 +6,5 @@ import com.example.company.inventory.domain.model.AvailableInventoryResult;
 
 public interface InventoryItemRepositoryPort {
 
-    Optional<AvailableInventoryResult> findAvailableByContainerCode(String containerCode);
+    Optional<AvailableInventoryResult> findAvailableByLot(String lot);
 }

@@ -32,8 +32,9 @@ public class InventoryPersistenceAdapter
     }
 
     @Override
-    public Optional<AvailableInventoryResult> findAvailableByContainerCode(String containerCode) {
-        return inventoryRepository.findAvailableByContainerCode(containerCode)
+    public Optional<AvailableInventoryResult> findAvailableByLot(String lot) {
+        return inventoryRepository.findAvailableByLot(lot)
+                .filter(row -> row.length > 0)
                 .map(this::mapToResult);
     }
 

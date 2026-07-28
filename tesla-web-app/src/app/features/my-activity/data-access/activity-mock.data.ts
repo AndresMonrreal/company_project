@@ -9,6 +9,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'RECEPTION',
     quantities: '120 pcs',
     status: 'RECEIVED',
+    lot: 'LOT-2024-001',
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'RECEPTION',
     quantities: '98 pcs',
     status: 'IN_CUTTING',
+    lot: 'LOT-2024-002',
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'CUT',
     quantities: '85 pcs',
     status: 'CUT',
+    lot: 'LOT-2024-003',
   },
   {
     id: 4,
@@ -36,6 +39,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'CUT',
     quantities: '110 pcs',
     status: 'SENT_TO_MOLDING',
+    lot: 'LOT-2024-004',
   },
   {
     id: 5,
@@ -45,6 +49,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'SCRAP',
     quantities: '12 pcs',
     status: 'CLOSED',
+    lot: null,
   },
   {
     id: 6,
@@ -54,6 +59,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'MOLDING_OUTPUT',
     quantities: '200 pcs',
     status: 'SENT_TO_MOLDING',
+    lot: 'LOT-2024-005',
   },
   {
     id: 7,
@@ -63,6 +69,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'SCRAP',
     quantities: '7 pcs',
     status: 'CLOSED',
+    lot: null,
   },
   {
     id: 8,
@@ -72,6 +79,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'MOLDING_OUTPUT',
     quantities: '175 pcs',
     status: 'SENT_TO_MOLDING',
+    lot: 'LOT-2024-006',
   },
   {
     id: 9,
@@ -81,6 +89,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'RECEPTION',
     quantities: '140 pcs',
     status: 'RECEIVED',
+    lot: 'LOT-2024-007',
   },
   {
     id: 10,
@@ -90,6 +99,7 @@ export const ACTIVITY_MOCK_DATA: ActivityRecord[] = [
     action: 'CUT',
     quantities: '93 pcs',
     status: 'IN_CUTTING',
+    lot: 'LOT-2024-008',
   },
 ];
 

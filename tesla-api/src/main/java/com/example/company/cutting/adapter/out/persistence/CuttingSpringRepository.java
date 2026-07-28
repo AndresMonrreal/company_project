@@ -18,11 +18,11 @@ public interface CuttingSpringRepository extends JpaRepository<CuttingRecordJpaE
             JOIN receptions r ON ii.reception_id = r.id
             JOIN containers c ON r.container_id = c.id
             JOIN profiles p ON r.profile_id = p.id
-            WHERE c.code = :containerCode
+            WHERE r.lot = :lot
             ORDER BY cr.cut_at DESC
             LIMIT 1
             """, nativeQuery = true)
-    Optional<Object[]> findAvailableByContainerCode(@Param("containerCode") String containerCode);
+    Optional<Object[]> findAvailableByLot(@Param("lot") String lot);
 
     @Query(value = """
             SELECT cr.id, cr.initial_quantity, cr.good_quantity, cr.scrap_quantity, cr.cut_at,

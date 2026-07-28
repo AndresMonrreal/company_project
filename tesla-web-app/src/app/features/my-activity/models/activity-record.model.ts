@@ -9,6 +9,7 @@ export interface ActivityRecord {
   action: ActivityAction;
   quantities: string;
   status: ActivityStatus | null;
+  lot: string | null;
 }
 
 export const ACTION_BADGE_COLOR: Record<ActivityAction, string> = {

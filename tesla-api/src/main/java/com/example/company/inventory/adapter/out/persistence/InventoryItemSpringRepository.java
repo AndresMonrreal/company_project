@@ -16,10 +16,11 @@ public interface InventoryItemSpringRepository extends JpaRepository<InventoryIt
             JOIN receptions r ON ii.reception_id = r.id
             JOIN containers c ON r.container_id = c.id
             JOIN profiles p ON r.profile_id = p.id
-            WHERE ii.status = 'AVAILABLE' AND c.code = :containerCode
+            WHERE ii.status = 'AVAILABLE' AND r.lot = :lot
+            ORDER BY r.received_at DESC
             LIMIT 1
             """, nativeQuery = true)
-    Optional<Object[]> findAvailableByContainerCode(@Param("containerCode") String containerCode);
+    Optional<Object[]> findAvailableByLot(@Param("lot") String lot);
 
     @Modifying
     @Query(value = "UPDATE inventory_items SET status = 'CUT', updated_at = CURRENT_TIMESTAMP WHERE id = :id",

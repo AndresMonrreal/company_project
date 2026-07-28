@@ -7,6 +7,7 @@ public record ActivityResponse(
         String profileCode,
         String action,
         String quantities,
-        String status
+        String status,
+        String lot
 ) {
 }

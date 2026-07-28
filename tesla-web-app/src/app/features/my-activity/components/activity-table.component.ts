@@ -25,6 +25,7 @@ import { ActivityDetailModalComponent } from './activity-detail-modal.component'
             <tr class="bg-gray-50 border-b border-gray-200">
               <th class="text-left px-4 py-3 font-medium text-gray-500">Time</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500">Container</th>
+              <th class="text-left px-4 py-3 font-medium text-gray-500">Lot</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500">Profile</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500">Action</th>
               <th class="text-left px-4 py-3 font-medium text-gray-500">Quantities</th>
@@ -39,6 +40,7 @@ import { ActivityDetailModalComponent } from './activity-detail-modal.component'
                 <td class="px-4 py-3">
                   <a [routerLink]="['/coming-soon']" class="text-indigo-600 hover:underline font-mono text-xs">{{ record.containerCode }}</a>
                 </td>
+                <td class="px-4 py-3 text-gray-700 font-mono text-xs">{{ record.lot ?? '—' }}</td>
                 <td class="px-4 py-3 text-gray-700">{{ record.profileCode }}</td>
                 <td class="px-4 py-3">
                   <span [class]="'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ' + actionBadgeColor(record.action)">

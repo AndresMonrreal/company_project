@@ -1,0 +1,1 @@
+UPDATE profiles SET code = 'EXTE00036-SA' WHERE code = 'SAEXTE00036';

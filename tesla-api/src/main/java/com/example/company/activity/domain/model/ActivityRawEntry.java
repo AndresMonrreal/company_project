@@ -11,6 +11,7 @@ public record ActivityRawEntry(
         int primaryQuantity,
         Integer secondaryQuantity,
         Integer tertiaryQuantity,
-        String status
+        String status,
+        String lot
 ) {
 }

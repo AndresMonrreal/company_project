@@ -15,7 +15,10 @@ export class ActivityFilterService {
       .filter(r => !this.timeTo() || r.time <= this.timeTo())
       .filter(r => {
         const term = this.searchTerm().toLowerCase();
-        return !term || (r.containerCode ?? '').toLowerCase().includes(term) || (r.profileCode ?? '').toLowerCase().includes(term);
+        return !term
+          || (r.containerCode ?? '').toLowerCase().includes(term)
+          || (r.profileCode ?? '').toLowerCase().includes(term)
+          || (r.lot ?? '').toLowerCase().includes(term);
       });
   }
 

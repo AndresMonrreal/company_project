@@ -18,8 +18,8 @@ public class GetAvailableInventoryService implements GetAvailableInventoryUseCas
     }
 
     @Override
-    public AvailableInventoryResult findAvailableByContainerCode(String containerCode) {
-        return inventoryRepository.findAvailableByContainerCode(containerCode)
-                .orElseThrow(() -> new InventoryNotAvailableException(containerCode));
+    public AvailableInventoryResult findAvailableByLot(String lot) {
+        return inventoryRepository.findAvailableByLot(lot)
+                .orElseThrow(() -> new InventoryNotAvailableException(lot));
     }
 }

@@ -61,8 +61,8 @@ public class CuttingRestController {
     }
 
     @GetMapping("/available")
-    public AvailableCuttingResponse findAvailable(@RequestParam String containerCode) {
-        AvailableCuttingResult result = getCutting.findAvailableByContainerCode(containerCode);
+    public AvailableCuttingResponse findAvailable(@RequestParam String lot) {
+        AvailableCuttingResult result = getCutting.findAvailableByLot(lot);
         return new AvailableCuttingResponse(
                 result.cuttingRecordId(),
                 result.containerCode(),

@@ -33,15 +33,15 @@ import { CuttingAvailableResult, MoldingOutputSuccessResponse } from '../models/
 
         <!-- Container code scanner input -->
         <div>
-          <label for="containerCode" class="block text-sm font-medium text-gray-700 mb-1">Container Code</label>
+          <label for="lot" class="block text-sm font-medium text-gray-700 mb-1">Lot Number</label>
           <div class="flex gap-2">
-            <input id="containerCode" type="text"
-                   [value]="containerCodeValue()"
-                   (input)="updateContainerCode($event)"
-                   (keydown.enter)="$event.preventDefault(); onContainerLookup()"
-                   placeholder="Scan or type container code"
+            <input id="lot" type="text"
+                   [value]="lotValue()"
+                   (input)="updateLotValue($event)"
+                   (keydown.enter)="$event.preventDefault(); onLotLookup()"
+                   placeholder="Scan or type lot number"
                    class="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-            <button type="button" (click)="onContainerLookup()"
+            <button type="button" (click)="onLotLookup()"
                     [disabled]="lookupLoading()"
                     class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
               @if (lookupLoading()) {
@@ -105,7 +105,7 @@ export class RegisterMoldingOutputPageComponent {
   private readonly api = inject(RegisterMoldingOutputApiClient);
   private readonly fb = inject(FormBuilder);
 
-  readonly containerCodeValue = signal('');
+  readonly lotValue = signal('');
   readonly lookupLoading = signal(false);
   readonly cuttingResult = signal<CuttingAvailableResult | null>(null);
   readonly lookupError = signal<string | null>(null);
@@ -117,12 +117,12 @@ export class RegisterMoldingOutputPageComponent {
     quantitySent: [null as number | null, [Validators.required, Validators.min(1)]],
   });
 
-  protected updateContainerCode(event: Event): void {
-    this.containerCodeValue.set((event.target as HTMLInputElement).value);
+  protected updateLotValue(event: Event): void {
+    this.lotValue.set((event.target as HTMLInputElement).value);
   }
 
-  protected onContainerLookup(): void {
-    const code = this.containerCodeValue().trim();
+  protected onLotLookup(): void {
+    const code = this.lotValue().trim();
     if (!code) return;
 
     this.lookupLoading.set(true);
@@ -138,7 +138,7 @@ export class RegisterMoldingOutputPageComponent {
       error: (err: HttpErrorResponse) => {
         this.lookupLoading.set(false);
         if (err.status === 404) {
-          this.lookupError.set(`No cut record found for container: ${code}`);
+          this.lookupError.set(`No cut record found for lot: ${code}`);
         } else {
           this.lookupError.set('Failed to load cut record. Please try again.');
         }
@@ -169,7 +169,7 @@ export class RegisterMoldingOutputPageComponent {
         this.submitting.set(false);
         this.form.reset();
         this.cuttingResult.set(null);
-        this.containerCodeValue.set('');
+        this.lotValue.set('');
         setTimeout(() => this.successResponse.set(null), 3000);
       },
       error: (err: HttpErrorResponse) => {

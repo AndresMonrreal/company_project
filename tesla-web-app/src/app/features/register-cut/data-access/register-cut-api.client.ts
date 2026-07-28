@@ -15,9 +15,9 @@ export class RegisterCutApiClient {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = inject(API_BASE_URL);
 
-  getInventoryAvailable(containerCode: string): Observable<InventoryAvailableResult> {
+  getInventoryAvailable(lot: string): Observable<InventoryAvailableResult> {
     return this.http.get<InventoryAvailableResult>(`${this.apiBaseUrl}/api/inventory/available`, {
-      params: { containerCode },
+      params: { lot },
       context: new HttpContext().set(SKIP_AUTH_ERROR, true),
     });
   }

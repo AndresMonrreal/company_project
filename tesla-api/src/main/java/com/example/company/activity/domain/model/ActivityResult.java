@@ -7,6 +7,7 @@ public record ActivityResult(
         String profileCode,
         ActivityAction action,
         String quantities,
-        String status
+        String status,
+        String lot
 ) {
 }

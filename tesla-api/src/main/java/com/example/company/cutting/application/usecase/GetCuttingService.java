@@ -43,9 +43,9 @@ public class GetCuttingService implements GetCuttingUseCase {
     }
 
     @Override
-    public AvailableCuttingResult findAvailableByContainerCode(String containerCode) {
-        return cuttingRepository.findAvailableByContainerCode(containerCode)
-                .orElseThrow(() -> new CuttingNotAvailableException(containerCode));
+    public AvailableCuttingResult findAvailableByLot(String lot) {
+        return cuttingRepository.findAvailableByLot(lot)
+                .orElseThrow(() -> new CuttingNotAvailableException(lot));
     }
 
     private CuttingResult toResult(CuttingRecord record) {

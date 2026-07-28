@@ -10,7 +10,7 @@ public interface GetCuttingUseCase {
 
     List<CuttingResult> findByOperatorAndShift(Long operatorId, Long shiftId);
 
-    AvailableCuttingResult findAvailableByContainerCode(String containerCode);
+    AvailableCuttingResult findAvailableByLot(String lot);
 
     CuttingResult findByIdWithCodes(Long id);
 }

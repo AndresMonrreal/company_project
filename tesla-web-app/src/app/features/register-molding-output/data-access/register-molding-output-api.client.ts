@@ -14,9 +14,9 @@ export class RegisterMoldingOutputApiClient {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = inject(API_BASE_URL);
 
-  getCuttingAvailable(containerCode: string): Observable<CuttingAvailableResult> {
+  getCuttingAvailable(lot: string): Observable<CuttingAvailableResult> {
     return this.http.get<CuttingAvailableResult>(`${this.apiBaseUrl}/api/cutting/available`, {
-      params: { containerCode },
+      params: { lot },
       context: new HttpContext().set(SKIP_AUTH_ERROR, true),
     });
   }

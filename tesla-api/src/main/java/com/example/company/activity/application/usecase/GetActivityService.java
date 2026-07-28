@@ -55,7 +55,8 @@ public class GetActivityService implements GetActivityUseCase {
                 entry.profileCode(),
                 entry.action(),
                 formatQuantities(entry),
-                entry.status()
+                entry.status(),
+                entry.lot()
         );
     }
 

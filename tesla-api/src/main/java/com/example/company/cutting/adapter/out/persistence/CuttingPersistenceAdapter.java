@@ -49,8 +49,8 @@ public class CuttingPersistenceAdapter implements CuttingRepositoryPort {
     }
 
     @Override
-    public Optional<AvailableCuttingResult> findAvailableByContainerCode(String containerCode) {
-        return cuttingRepository.findAvailableByContainerCode(containerCode)
+    public Optional<AvailableCuttingResult> findAvailableByLot(String lot) {
+        return cuttingRepository.findAvailableByLot(lot)
                 .map(this::mapToAvailableResult);
     }
 

@@ -15,7 +15,7 @@ public interface CuttingRepositoryPort {
 
     List<CuttingRecord> findByOperatorAndShift(Long operatorId, Long shiftId);
 
-    Optional<AvailableCuttingResult> findAvailableByContainerCode(String containerCode);
+    Optional<AvailableCuttingResult> findAvailableByLot(String lot);
 
     Optional<CuttingResult> findByIdWithCodes(Long id);
 }

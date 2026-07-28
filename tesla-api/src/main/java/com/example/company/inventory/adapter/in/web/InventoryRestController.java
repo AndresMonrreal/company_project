@@ -19,8 +19,8 @@ public class InventoryRestController {
     }
 
     @GetMapping("/available")
-    public AvailableInventoryResponse findAvailable(@RequestParam String containerCode) {
-        AvailableInventoryResult result = getAvailableInventory.findAvailableByContainerCode(containerCode);
+    public AvailableInventoryResponse findAvailable(@RequestParam String lot) {
+        AvailableInventoryResult result = getAvailableInventory.findAvailableByLot(lot);
         return new AvailableInventoryResponse(
                 result.inventoryItemId(),
                 result.containerCode(),

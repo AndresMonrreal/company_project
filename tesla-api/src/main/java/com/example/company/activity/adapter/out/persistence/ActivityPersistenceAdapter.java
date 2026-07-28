@@ -26,7 +26,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
         String timeFilter = overnight
                 ? "CAST(r.received_at AS TIME) >= :startTime OR CAST(r.received_at AS TIME) <= :endTime"
                 : "CAST(r.received_at AS TIME) BETWEEN :startTime AND :endTime";
-        String sql = "SELECT r.id, c.code, p.code, r.received_quantity, r.status, r.received_at " +
+        String sql = "SELECT r.id, c.code, p.code, r.received_quantity, r.status, r.received_at, r.lot " +
                 "FROM receptions r " +
                 "JOIN containers c ON r.container_id = c.id " +
                 "JOIN profiles p ON r.profile_id = p.id " +
@@ -41,7 +41,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
     @Override
     @SuppressWarnings("unchecked")
     public List<ActivityRawEntry> findCuttingByOperatorAndShift(Long operatorId, Long shiftId) {
-        String sql = "SELECT cr.id, c.code, p.code, cr.initial_quantity, cr.good_quantity, cr.scrap_quantity, cr.cut_at " +
+        String sql = "SELECT cr.id, c.code, p.code, cr.initial_quantity, cr.good_quantity, cr.scrap_quantity, cr.cut_at, r.lot " +
                 "FROM cutting_records cr " +
                 "JOIN inventory_items ii ON cr.inventory_item_id = ii.id " +
                 "JOIN receptions r ON ii.reception_id = r.id " +
@@ -73,7 +73,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
         String timeFilter = overnight
                 ? "CAST(mo.sent_at AS TIME) >= :startTime OR CAST(mo.sent_at AS TIME) <= :endTime"
                 : "CAST(mo.sent_at AS TIME) BETWEEN :startTime AND :endTime";
-        String sql = "SELECT mo.id, c.code, p.code, mo.quantity_sent, mo.sent_at " +
+        String sql = "SELECT mo.id, c.code, p.code, mo.quantity_sent, mo.sent_at, r.lot " +
                 "FROM molding_outputs mo " +
                 "JOIN cutting_records cr ON mo.cutting_record_id = cr.id " +
                 "JOIN inventory_items ii ON cr.inventory_item_id = ii.id " +
@@ -102,7 +102,8 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 ((Number) row[3]).intValue(),
                 null,
                 null,
-                (String) row[4]
+                (String) row[4],
+                (String) row[6]
         );
     }
 
@@ -116,7 +117,8 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 ((Number) row[3]).intValue(),
                 ((Number) row[4]).intValue(),
                 ((Number) row[5]).intValue(),
-                null
+                null,
+                (String) row[7]
         );
     }
 
@@ -129,6 +131,7 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 ActivityAction.SCRAP,
                 toLocalDateTime(cols[3]),
                 ((Number) cols[2]).intValue(),
+                null,
                 null,
                 null,
                 null
@@ -145,7 +148,8 @@ public class ActivityPersistenceAdapter implements ActivityQueryPort {
                 ((Number) row[3]).intValue(),
                 null,
                 null,
-                null
+                null,
+                (String) row[5]
         );
     }
 

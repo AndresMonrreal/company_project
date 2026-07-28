@@ -4,5 +4,5 @@ import com.example.company.inventory.domain.model.AvailableInventoryResult;
 
 public interface GetAvailableInventoryUseCase {
 
-    AvailableInventoryResult findAvailableByContainerCode(String containerCode);
+    AvailableInventoryResult findAvailableByLot(String lot);
 }

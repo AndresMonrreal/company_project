@@ -18,12 +18,12 @@ class MachineTest {
 
     @Test
     void createsWithAllNewFields() {
-        Machine machine = Machine.create("CUT-01", "M001", "MAINTENANCE", "HEADER", 30, null, "obs");
+        Machine machine = Machine.create("CUT-01", "M001", "MAINTENANCE", "HEADER", 30.0, null, "obs");
 
         assertThat(machine.code()).isEqualTo("M001");
         assertThat(machine.status()).isEqualTo("MAINTENANCE");
         assertThat(machine.processesType()).isEqualTo("HEADER");
-        assertThat(machine.cycleTimeSeconds()).isEqualTo(30);
+        assertThat(machine.cycleTimeSeconds()).isEqualTo(30.0);
         assertThat(machine.observations()).isEqualTo("obs");
     }
 

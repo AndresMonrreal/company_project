@@ -12,12 +12,12 @@ public final class Machine {
     private String code;
     private String status;
     private String processesType;
-    private Integer cycleTimeSeconds;
+    private Double cycleTimeSeconds;
     private LocalDate lastMaintenanceDate;
     private String observations;
 
     private Machine(Long id, String name, boolean active, String code, String status,
-                    String processesType, Integer cycleTimeSeconds,
+                    String processesType, Double cycleTimeSeconds,
                     LocalDate lastMaintenanceDate, String observations) {
         this.id = id;
         this.name = requireText(name, "Machine name is required", MAX_NAME_LENGTH, "Machine name must be 80 characters or fewer");
@@ -31,21 +31,21 @@ public final class Machine {
     }
 
     public static Machine create(String name, String code, String status, String processesType,
-                                 Integer cycleTimeSeconds, LocalDate lastMaintenanceDate,
+                                 Double cycleTimeSeconds, LocalDate lastMaintenanceDate,
                                  String observations) {
         return new Machine(null, name, true, code, status, processesType,
                 cycleTimeSeconds, lastMaintenanceDate, observations);
     }
 
     public static Machine restore(Long id, String name, boolean active, String code, String status,
-                                  String processesType, Integer cycleTimeSeconds,
+                                  String processesType, Double cycleTimeSeconds,
                                   LocalDate lastMaintenanceDate, String observations) {
         return new Machine(id, name, active, code, status, processesType,
                 cycleTimeSeconds, lastMaintenanceDate, observations);
     }
 
     public void update(String name, String code, String status, String processesType,
-                       Integer cycleTimeSeconds, LocalDate lastMaintenanceDate,
+                       Double cycleTimeSeconds, LocalDate lastMaintenanceDate,
                        String observations) {
         this.name = requireText(name, "Machine name is required", MAX_NAME_LENGTH, "Machine name must be 80 characters or fewer");
         this.code = code;
@@ -66,7 +66,7 @@ public final class Machine {
     public String code() { return code; }
     public String status() { return status; }
     public String processesType() { return processesType; }
-    public Integer cycleTimeSeconds() { return cycleTimeSeconds; }
+    public Double cycleTimeSeconds() { return cycleTimeSeconds; }
     public LocalDate lastMaintenanceDate() { return lastMaintenanceDate; }
     public String observations() { return observations; }
 

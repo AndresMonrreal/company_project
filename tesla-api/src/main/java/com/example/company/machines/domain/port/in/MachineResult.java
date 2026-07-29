@@ -9,7 +9,7 @@ public record MachineResult(
         String code,
         String status,
         String processesType,
-        Integer cycleTimeSeconds,
+        Double cycleTimeSeconds,
         LocalDate lastMaintenanceDate,
         String observations
 ) {

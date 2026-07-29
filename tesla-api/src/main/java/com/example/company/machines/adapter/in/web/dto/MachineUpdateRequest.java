@@ -11,7 +11,7 @@ public record MachineUpdateRequest(
         @Size(max = 20) String code,
         @NotBlank @Size(max = 20) String status,
         @Pattern(regexp = "^(HEADER|LOWER|BOTH)$") String processesType,
-        Integer cycleTimeSeconds,
+        Double cycleTimeSeconds,
         LocalDate lastMaintenanceDate,
         @Size(max = 500) String observations
 ) {

@@ -37,7 +37,7 @@ public class MachineJpaEntity {
     private String processesType;
 
     @Column(name = "cycle_time_seconds")
-    private Integer cycleTimeSeconds;
+    private Double cycleTimeSeconds;
 
     @Column(name = "last_maintenance_date")
     private LocalDate lastMaintenanceDate;
@@ -59,7 +59,7 @@ public class MachineJpaEntity {
     }
 
     MachineJpaEntity(String name, boolean active, String code, String status,
-                     String processesType, Integer cycleTimeSeconds,
+                     String processesType, Double cycleTimeSeconds,
                      LocalDate lastMaintenanceDate, String observations) {
         this.name = name;
         this.active = active;
@@ -84,7 +84,7 @@ public class MachineJpaEntity {
     }
 
     void updateFromDomain(String name, boolean active, String code, String status,
-                          String processesType, Integer cycleTimeSeconds,
+                          String processesType, Double cycleTimeSeconds,
                           LocalDate lastMaintenanceDate, String observations) {
         this.name = name;
         this.active = active;
@@ -102,7 +102,7 @@ public class MachineJpaEntity {
     String getCode() { return code; }
     String getStatus() { return status; }
     String getProcessesType() { return processesType; }
-    Integer getCycleTimeSeconds() { return cycleTimeSeconds; }
+    Double getCycleTimeSeconds() { return cycleTimeSeconds; }
     LocalDate getLastMaintenanceDate() { return lastMaintenanceDate; }
     String getObservations() { return observations; }
 }

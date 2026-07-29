@@ -258,7 +258,7 @@ type ActiveTab = 'profiles' | 'machines' | 'shifts' | 'containerTypes' | 'contai
                   </div>
                   <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Cycle Time (seconds)</label>
-                    <input type="number" formControlName="cycleTimeSeconds" min="0"
+                    <input type="number" formControlName="cycleTimeSeconds" min="0" step="0.01"
                       class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>

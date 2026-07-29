@@ -59,6 +59,19 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(org.springframework.web.bind.MissingServletRequestParameterException.class)
+    ResponseEntity<ApiErrorResponse> missingParameter(
+            org.springframework.web.bind.MissingServletRequestParameterException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI(), Map.of());
+    }
+
+    @ExceptionHandler(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class)
+    ResponseEntity<ApiErrorResponse> typeMismatch(
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST,
+                "Parameter '" + ex.getName() + "' has invalid value", request.getRequestURI(), Map.of());
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity<ApiErrorResponse> unexpected(Exception ex, HttpServletRequest request) {
         log.error("Unexpected error processing request {}: {}", request.getRequestURI(), ex.getMessage(), ex);

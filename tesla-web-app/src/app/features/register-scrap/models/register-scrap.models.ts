@@ -29,3 +29,14 @@ export interface ScrapSuccessResponse {
   reason: string | null;
   createdAt: string;
 }
+
+export interface ScrapReportEntry {
+  id: number;
+  time: string;
+  source: 'CUTTING' | 'MOLDING';
+  profileCode: string;
+  machineName: string | null;
+  lot: string | null;
+  quantity: number;
+  reason: string | null;
+}

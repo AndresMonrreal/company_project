@@ -117,6 +117,17 @@ import { CutSuccessResponse, InventoryAvailableResult, MachineOption } from '../
                 </p>
               }
 
+              @if (showScrapReason()) {
+                <div>
+                  <label for="scrapReason" class="block text-sm font-medium text-gray-700 mb-1">
+                    Scrap Reason <span class="text-red-500">*</span>
+                  </label>
+                  <textarea id="scrapReason" formControlName="scrapReason" rows="2" maxlength="255"
+                            placeholder="Describe reason for scrap…"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+                </div>
+              }
+
               <button type="submit"
                       [disabled]="submitting() || form.invalid || !quantitiesMatch() || !currentShiftId()"
                       class="w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
@@ -151,12 +162,14 @@ export class RegisterCutPageComponent implements OnInit {
   readonly submitting = signal(false);
   readonly successResponse = signal<CutSuccessResponse | null>(null);
   readonly errorMessage = signal<string | null>(null);
+  readonly showScrapReason = signal(false);
 
   readonly form = this.fb.group({
     machineId: [null as number | null, Validators.required],
     initialQuantity: [null as number | null, [Validators.required, Validators.min(1)]],
     goodQuantity: [null as number | null, [Validators.required, Validators.min(0)]],
     scrapQuantity: [null as number | null, [Validators.required, Validators.min(0)]],
+    scrapReason: [null as string | null],
   });
 
   ngOnInit(): void {
@@ -174,6 +187,19 @@ export class RegisterCutPageComponent implements OnInit {
         this.catalogsLoading.set(false);
       },
     });
+
+    this.form.get('scrapQuantity')!.valueChanges.subscribe(qty => {
+      const hasScrap = qty != null && qty > 0;
+      this.showScrapReason.set(hasScrap);
+      const reasonCtrl = this.form.get('scrapReason')!;
+      if (hasScrap) {
+        reasonCtrl.setValidators([Validators.required, Validators.maxLength(255)]);
+      } else {
+        reasonCtrl.clearValidators();
+        reasonCtrl.setValue(null);
+      }
+      reasonCtrl.updateValueAndValidity();
+    });
   }
 
   protected updateLotValue(event: Event): void {
@@ -188,6 +214,7 @@ export class RegisterCutPageComponent implements OnInit {
     this.inventoryResult.set(null);
     this.inventoryError.set(null);
     this.form.reset();
+    this.showScrapReason.set(false);
 
     this.api.getInventoryAvailable(code).subscribe({
       next: (result) => {
@@ -220,7 +247,7 @@ export class RegisterCutPageComponent implements OnInit {
     this.errorMessage.set(null);
     this.successResponse.set(null);
 
-    const { machineId, initialQuantity, goodQuantity, scrapQuantity } = this.form.getRawValue();
+    const { machineId, initialQuantity, goodQuantity, scrapQuantity, scrapReason } = this.form.getRawValue();
 
     this.api.register({
       inventoryItemId: inventory.inventoryItemId,
@@ -229,11 +256,13 @@ export class RegisterCutPageComponent implements OnInit {
       initialQuantity: initialQuantity!,
       goodQuantity: goodQuantity!,
       scrapQuantity: scrapQuantity!,
+      scrapReason: scrapReason ?? null,
     }).subscribe({
       next: (response) => {
         this.successResponse.set(response);
         this.submitting.set(false);
         this.form.reset();
+        this.showScrapReason.set(false);
         this.inventoryResult.set(null);
         this.lotValue.set('');
         setTimeout(() => this.successResponse.set(null), 3000);
@@ -241,7 +270,12 @@ export class RegisterCutPageComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);
         if (err.status === 422) {
-          this.errorMessage.set('Quantities do not add up: initial must equal good + scrap.');
+          const code = err.error?.code;
+          if (code === 'cutting.scrap-reason-required') {
+            this.errorMessage.set('Scrap reason is required when scrap quantity is greater than zero.');
+          } else {
+            this.errorMessage.set('Quantities do not add up: initial must equal good + scrap.');
+          }
         } else if (err.status === 401) {
           this.errorMessage.set('Session expired. Please log in again.');
         } else if (err.status === 403) {

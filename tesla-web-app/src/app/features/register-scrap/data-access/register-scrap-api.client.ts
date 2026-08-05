@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../../../core/http/api-url.token';
 import {
   ProfileOption,
   RegisterScrapRequest,
+  ScrapReportEntry,
   ScrapSuccessResponse,
   ShiftOption,
 } from '../models/register-scrap.models';
@@ -24,5 +25,11 @@ export class RegisterScrapApiClient {
 
   register(request: RegisterScrapRequest): Observable<ScrapSuccessResponse> {
     return this.http.post<ScrapSuccessResponse>(`${this.apiBaseUrl}/api/scrap`, request);
+  }
+
+  getScrapReport(shiftId: number): Observable<ScrapReportEntry[]> {
+    return this.http.get<ScrapReportEntry[]>(`${this.apiBaseUrl}/api/scrap/report`, {
+      params: { shiftId: shiftId.toString() },
+    });
   }
 }

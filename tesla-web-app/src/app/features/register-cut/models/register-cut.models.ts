@@ -18,6 +18,7 @@ export interface RegisterCutRequest {
   initialQuantity: number;
   goodQuantity: number;
   scrapQuantity: number;
+  scrapReason: string | null;
 }
 
 export interface CutSuccessResponse {
@@ -28,5 +29,6 @@ export interface CutSuccessResponse {
   initialQuantity: number;
   goodQuantity: number;
   scrapQuantity: number;
+  scrapReason: string | null;
   cutAt: string;
 }
